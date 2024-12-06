@@ -68,6 +68,12 @@ defmodule EcampusWeb.Router do
       on_mount: [{EcampusWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/specialities", SpecialityLive.Index, :index
+      live "/specialities/new", SpecialityLive.Index, :new
+      live "/specialities/:id/edit", SpecialityLive.Index, :edit
+      live "/specialities/:id", SpecialityLive.Show, :show
+      live "/specialities/:id/show/edit", SpecialityLive.Show, :edit
     end
   end
 
