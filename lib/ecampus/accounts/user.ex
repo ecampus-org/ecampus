@@ -10,6 +10,8 @@ defmodule Ecampus.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
 
+    belongs_to(:group, Ecampus.Groups.Group)
+
     timestamps(type: :utc_datetime)
   end
 
