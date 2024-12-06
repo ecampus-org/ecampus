@@ -3,14 +3,26 @@ defmodule EcampusWeb.SpecialityLiveTest do
 
   import Phoenix.LiveViewTest
   import Ecampus.SpecialitiesFixtures
+  import Ecampus.AccountsFixtures
 
   @create_attrs %{code: "some code", description: "some description", title: "some title"}
-  @update_attrs %{code: "some updated code", description: "some updated description", title: "some updated title"}
+  @update_attrs %{
+    code: "some updated code",
+    description: "some updated description",
+    title: "some updated title"
+  }
   @invalid_attrs %{code: nil, description: nil, title: nil}
 
   defp create_speciality(_) do
     speciality = speciality_fixture()
     %{speciality: speciality}
+  end
+
+  setup %{conn: conn} do
+    user = user_fixture()
+    conn = log_in_user(conn, user)
+
+    %{conn: conn, user: user}
   end
 
   describe "Index" do
