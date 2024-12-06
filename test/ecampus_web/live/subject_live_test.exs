@@ -49,7 +49,7 @@ defmodule EcampusWeb.SubjectLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/subjects")
 
       assert html =~ "Listing Subjects"
-      assert html =~ subject.description
+      assert html =~ subject.title
     end
 
     test "saves new subject", %{conn: conn} do
@@ -72,7 +72,7 @@ defmodule EcampusWeb.SubjectLiveTest do
 
       html = render(index_live)
       assert html =~ "Subject created successfully"
-      assert html =~ "some description"
+      assert html =~ "some title"
     end
 
     test "updates subject in listing", %{conn: conn, subject: subject} do
@@ -95,7 +95,7 @@ defmodule EcampusWeb.SubjectLiveTest do
 
       html = render(index_live)
       assert html =~ "Subject updated successfully"
-      assert html =~ "some updated description"
+      assert html =~ "some updated title"
     end
 
     test "deletes subject in listing", %{conn: conn, subject: subject} do
