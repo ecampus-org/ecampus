@@ -1,4 +1,7 @@
 defmodule EcampusWeb.UserAuth do
+  @moduledoc """
+  The UserAuth context.
+  """
   use EcampusWeb, :verified_routes
 
   import Plug.Conn

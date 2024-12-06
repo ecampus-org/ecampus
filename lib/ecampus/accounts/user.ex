@@ -1,4 +1,8 @@
 defmodule Ecampus.Accounts.User do
+  @moduledoc """
+  The User context.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,4 +1,8 @@
 defmodule Ecampus.Specialities.Speciality do
+  @moduledoc """
+  The Speciality context.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

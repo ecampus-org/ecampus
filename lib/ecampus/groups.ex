@@ -18,7 +18,7 @@ defmodule Ecampus.Groups do
 
   """
   def list_groups do
-    Repo.all(Group |> preload(:speciality))
+    Repo.all(Group) |> Repo.preload(:speciality)
   end
 
   @doc """
@@ -50,10 +50,13 @@ defmodule Ecampus.Groups do
 
   """
   def create_group(attrs \\ %{}) do
-    %Group{}
-    |> Group.changeset(attrs)
-    |> Repo.insert()
-    |> Repo.preload(:speciality)
+    changeset =
+      %Group{}
+      |> Group.changeset(attrs)
+
+    with {:ok, group} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(group, [:speciality])}
+    end
   end
 
   @doc """
@@ -69,10 +72,13 @@ defmodule Ecampus.Groups do
 
   """
   def update_group(%Group{} = group, attrs) do
-    group
-    |> Group.changeset(attrs)
-    |> Repo.update()
-    |> Repo.preload(:speciality)
+    changeset =
+      group
+      |> Group.changeset(attrs)
+
+    with {:ok, group} <- Repo.update(changeset) do
+      {:ok, Repo.preload(group, [:speciality])}
+    end
   end
 
   @doc """

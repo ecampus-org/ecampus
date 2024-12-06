@@ -1,4 +1,8 @@
 defmodule Ecampus.Groups.Group do
+  @moduledoc """
+  The Group context.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
