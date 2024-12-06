@@ -8,7 +8,7 @@ defmodule EcampusWeb.SubjectLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        {@title}
         <:subtitle>Use this form to manage subject records in your database.</:subtitle>
       </.header>
 

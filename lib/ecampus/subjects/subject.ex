@@ -16,7 +16,21 @@ defmodule Ecampus.Subjects.Subject do
   @doc false
   def changeset(subject, attrs) do
     subject
-    |> cast(attrs, [:title, :short_title, :description, :prerequisites, :objectives, :required_texts])
-    |> validate_required([:title, :short_title, :description, :prerequisites, :objectives, :required_texts])
+    |> cast(attrs, [
+      :title,
+      :short_title,
+      :description,
+      :prerequisites,
+      :objectives,
+      :required_texts
+    ])
+    |> validate_required([
+      :title,
+      :short_title,
+      :description,
+      :prerequisites,
+      :objectives,
+      :required_texts
+    ])
   end
 end

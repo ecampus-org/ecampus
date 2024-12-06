@@ -8,7 +8,14 @@ defmodule Ecampus.SubjectsTest do
 
     import Ecampus.SubjectsFixtures
 
-    @invalid_attrs %{description: nil, title: nil, short_title: nil, prerequisites: nil, objectives: nil, required_texts: nil}
+    @invalid_attrs %{
+      description: nil,
+      title: nil,
+      short_title: nil,
+      prerequisites: nil,
+      objectives: nil,
+      required_texts: nil
+    }
 
     test "list_subjects/0 returns all subjects" do
       subject = subject_fixture()
@@ -21,7 +28,14 @@ defmodule Ecampus.SubjectsTest do
     end
 
     test "create_subject/1 with valid data creates a subject" do
-      valid_attrs = %{description: "some description", title: "some title", short_title: "some short_title", prerequisites: "some prerequisites", objectives: "some objectives", required_texts: "some required_texts"}
+      valid_attrs = %{
+        description: "some description",
+        title: "some title",
+        short_title: "some short_title",
+        prerequisites: "some prerequisites",
+        objectives: "some objectives",
+        required_texts: "some required_texts"
+      }
 
       assert {:ok, %Subject{} = subject} = Subjects.create_subject(valid_attrs)
       assert subject.description == "some description"
@@ -38,7 +52,15 @@ defmodule Ecampus.SubjectsTest do
 
     test "update_subject/2 with valid data updates the subject" do
       subject = subject_fixture()
-      update_attrs = %{description: "some updated description", title: "some updated title", short_title: "some updated short_title", prerequisites: "some updated prerequisites", objectives: "some updated objectives", required_texts: "some updated required_texts"}
+
+      update_attrs = %{
+        description: "some updated description",
+        title: "some updated title",
+        short_title: "some updated short_title",
+        prerequisites: "some updated prerequisites",
+        objectives: "some updated objectives",
+        required_texts: "some updated required_texts"
+      }
 
       assert {:ok, %Subject{} = subject} = Subjects.update_subject(subject, update_attrs)
       assert subject.description == "some updated description"

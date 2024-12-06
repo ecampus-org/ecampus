@@ -35,9 +35,16 @@ defmodule Ecampus.SpecialitiesTest do
 
     test "update_speciality/2 with valid data updates the speciality" do
       speciality = speciality_fixture()
-      update_attrs = %{code: "some updated code", description: "some updated description", title: "some updated title"}
 
-      assert {:ok, %Speciality{} = speciality} = Specialities.update_speciality(speciality, update_attrs)
+      update_attrs = %{
+        code: "some updated code",
+        description: "some updated description",
+        title: "some updated title"
+      }
+
+      assert {:ok, %Speciality{} = speciality} =
+               Specialities.update_speciality(speciality, update_attrs)
+
       assert speciality.code == "some updated code"
       assert speciality.description == "some updated description"
       assert speciality.title == "some updated title"
@@ -45,7 +52,10 @@ defmodule Ecampus.SpecialitiesTest do
 
     test "update_speciality/2 with invalid data returns error changeset" do
       speciality = speciality_fixture()
-      assert {:error, %Ecto.Changeset{}} = Specialities.update_speciality(speciality, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Specialities.update_speciality(speciality, @invalid_attrs)
+
       assert speciality == Specialities.get_speciality!(speciality.id)
     end
 
