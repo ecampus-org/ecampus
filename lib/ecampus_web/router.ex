@@ -95,6 +95,12 @@ defmodule EcampusWeb.Router do
       live "/admin/lessons/:id/edit", LessonLive.Index, :edit
       live "/admin/lessons/:id", LessonLive.Show, :show
       live "/admin/lessons/:id/show/edit", LessonLive.Show, :edit
+
+      live "/admin/lessons/:lesson_id/topics", LessonTopicLive.Index, :index
+      live "/admin/lessons/:lesson_id/topics/new", LessonTopicLive.Index, :new
+      live "/admin/lessons/:lesson_id/topics/:id/edit", LessonTopicLive.Index, :edit
+      live "/admin/lessons/:lesson_id/topics/:id", LessonTopicLive.Show, :show
+      live "/admin/lessons/:lesson_id/topics/:id/show/edit", LessonTopicLive.Show, :edit
     end
   end
 

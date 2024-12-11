@@ -99,4 +99,62 @@ defmodule Ecampus.LessonsTest do
     %{id: subject_id} = subject_fixture()
     lesson_fixture(%{subject_id: subject_id})
   end
+
+  describe "lesson_topics" do
+    alias Ecampus.Lessons.LessonTopic
+
+    import Ecampus.LessonsFixtures
+
+    @invalid_attrs %{title: nil, content: nil, sort_order: nil}
+
+    test "list_lesson_topics/0 returns all lesson_topics" do
+      lesson_topic = lesson_topic_fixture()
+      assert Lessons.list_lesson_topics() == [lesson_topic]
+    end
+
+    test "get_lesson_topic!/1 returns the lesson_topic with given id" do
+      lesson_topic = lesson_topic_fixture()
+      assert Lessons.get_lesson_topic!(lesson_topic.id) == lesson_topic
+    end
+
+    test "create_lesson_topic/1 with valid data creates a lesson_topic" do
+      valid_attrs = %{title: "some title", content: "some content", sort_order: 42}
+
+      assert {:ok, %LessonTopic{} = lesson_topic} = Lessons.create_lesson_topic(valid_attrs)
+      assert lesson_topic.title == "some title"
+      assert lesson_topic.content == "some content"
+      assert lesson_topic.sort_order == 42
+    end
+
+    test "create_lesson_topic/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Lessons.create_lesson_topic(@invalid_attrs)
+    end
+
+    test "update_lesson_topic/2 with valid data updates the lesson_topic" do
+      lesson_topic = lesson_topic_fixture()
+      update_attrs = %{title: "some updated title", content: "some updated content", sort_order: 43}
+
+      assert {:ok, %LessonTopic{} = lesson_topic} = Lessons.update_lesson_topic(lesson_topic, update_attrs)
+      assert lesson_topic.title == "some updated title"
+      assert lesson_topic.content == "some updated content"
+      assert lesson_topic.sort_order == 43
+    end
+
+    test "update_lesson_topic/2 with invalid data returns error changeset" do
+      lesson_topic = lesson_topic_fixture()
+      assert {:error, %Ecto.Changeset{}} = Lessons.update_lesson_topic(lesson_topic, @invalid_attrs)
+      assert lesson_topic == Lessons.get_lesson_topic!(lesson_topic.id)
+    end
+
+    test "delete_lesson_topic/1 deletes the lesson_topic" do
+      lesson_topic = lesson_topic_fixture()
+      assert {:ok, %LessonTopic{}} = Lessons.delete_lesson_topic(lesson_topic)
+      assert_raise Ecto.NoResultsError, fn -> Lessons.get_lesson_topic!(lesson_topic.id) end
+    end
+
+    test "change_lesson_topic/1 returns a lesson_topic changeset" do
+      lesson_topic = lesson_topic_fixture()
+      assert %Ecto.Changeset{} = Lessons.change_lesson_topic(lesson_topic)
+    end
+  end
 end
