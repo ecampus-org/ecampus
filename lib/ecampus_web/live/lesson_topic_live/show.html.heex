@@ -13,9 +13,12 @@
 
 <.list>
   <:item title="Title">{@lesson_topic.title}</:item>
-  <:item title="Content">{@lesson_topic.content}</:item>
   <:item title="Sort order">{@lesson_topic.sort_order}</:item>
 </.list>
+
+<div class="prose">
+  {Map.get(@lesson_topic, "html_content")}
+</div>
 
 <.back navigate={~p"/admin/lessons/#{@lesson_id}/topics"}>Back to lesson_topics</.back>
 

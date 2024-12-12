@@ -4,7 +4,7 @@ defmodule Ecampus.Lessons.LessonTopic do
 
   @derive {
     Flop.Schema,
-    filterable: [:title, :lesson_id], sortable: [:sort_order]
+    filterable: [:title, :lesson_id], sortable: [:sort_order, :id]
   }
 
   schema "lesson_topics" do

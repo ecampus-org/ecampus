@@ -125,7 +125,6 @@ defmodule Ecampus.Lessons do
   """
   def list_lesson_topics(params \\ %{}) do
     filters = []
-    params |> IO.inspect()
 
     filters =
       params
@@ -142,7 +141,9 @@ defmodule Ecampus.Lessons do
       %{
         page: Map.get(params, "page", 1),
         page_size: Map.get(params, "page_size", 10),
-        filters: filters
+        filters: filters,
+        order_by: [:sort_order, :id],
+        order_directions: [:asc, :asc]
       },
       for: LessonTopic
     )

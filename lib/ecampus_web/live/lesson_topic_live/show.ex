@@ -10,11 +10,23 @@ defmodule EcampusWeb.LessonTopicLive.Show do
 
   @impl true
   def handle_params(%{"id" => id, "lesson_id" => lesson_id}, _, socket) do
+    lesson_topic =
+      id |> Lessons.get_lesson_topic!() |> parse_markdown()
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:lesson_id, lesson_id)
-     |> assign(:lesson_topic, Lessons.get_lesson_topic!(id))}
+     |> assign(:lesson_topic, lesson_topic)}
+  end
+
+  defp parse_markdown(lesson_topic) do
+    html_content =
+      lesson_topic.content
+      |> Earmark.as_html!()
+      |> Phoenix.HTML.raw()
+
+    lesson_topic |> Map.put("html_content", html_content)
   end
 
   defp page_title(:show), do: "Show Lesson topic"
