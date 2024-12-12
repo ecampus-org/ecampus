@@ -15,9 +15,9 @@ defmodule EcampusWeb.LessonTopicLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:content]} type="text" label="Content" />
         <.input field={@form[:sort_order]} type="number" label="Sort order" />
         <.input field={@form[:lesson_id]} type="hidden" value={@lesson_id} />
+        <.input field={@form[:content]} type="textarea" class="w-full" label="Content" rows="12" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Lesson topic</.button>
         </:actions>

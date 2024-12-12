@@ -46,13 +46,13 @@ defmodule EcampusWeb.CoreComponents do
     ~H"""
     <dialog
       id={@id}
-      class="modal modal-bottom sm:modal-middle"
+      class="modal modal-middle"
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       phx-hook="Dialog"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
     >
-      <div class="modal-box">
+      <div class="modal-box w-11/12 max-w-7xl">
         <div class="flex flex-row justify-between items-center">
           <h3 class="text-lg font-bold" id={"#{@id}-title"}>
             {render_slot(@title)}
@@ -333,9 +333,8 @@ defmodule EcampusWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "textarea textarea-bordered w-full",
+          @errors != [] && "textarea-error"
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
