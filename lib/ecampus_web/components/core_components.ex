@@ -40,6 +40,7 @@ defmodule EcampusWeb.CoreComponents do
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
+  slot :title, required: true
 
   def modal(assigns) do
     ~H"""
@@ -52,16 +53,21 @@ defmodule EcampusWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
     >
       <div class="modal-box">
-        <h3 class="text-lg font-bold" id={"#{@id}-title"}>
-          {gettext("Modal Title")}
-        </h3>
+        <div class="flex flex-row justify-between items-center">
+          <h3 class="text-lg font-bold" id={"#{@id}-title"}>
+            {render_slot(@title)}
+          </h3>
+          <button
+            phx-click={JS.exec("data-cancel", to: "##{@id}")}
+            type="button"
+            class="btn btn-ghost"
+          >
+            <.icon name="hero-x-mark" />
+          </button>
+        </div>
+
         <div id={"#{@id}-content"} class="py-4">
           {render_slot(@inner_block)}
-        </div>
-        <div class="modal-action">
-          <button phx-click={JS.exec("data-cancel", to: "##{@id}")} type="button" class="btn">
-            {gettext("Close")}
-          </button>
         </div>
       </div>
     </dialog>

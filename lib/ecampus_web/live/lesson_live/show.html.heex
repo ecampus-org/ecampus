@@ -31,10 +31,10 @@
   show
   on_cancel={JS.patch(~p"/admin/lessons/#{@lesson}")}
 >
+  <:title>{@page_title}</:title>
   <.live_component
     module={EcampusWeb.LessonLive.FormComponent}
     id={@lesson.id}
-    title={@page_title}
     action={@live_action}
     lesson={@lesson}
     subjects={@subjects}

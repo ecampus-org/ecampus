@@ -49,7 +49,9 @@ defmodule EcampusWeb.LessonTopicLiveTest do
     test "updates lesson_topic in listing", %{conn: conn, lesson_topic: lesson_topic} do
       {:ok, index_live, _html} = live(conn, ~p"/lesson_topics")
 
-      assert index_live |> element("#lesson_topics-#{lesson_topic.id} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#lesson_topics-#{lesson_topic.id} a", "Edit")
+             |> render_click() =~
                "Edit Lesson topic"
 
       assert_patch(index_live, ~p"/lesson_topics/#{lesson_topic}/edit")
@@ -72,7 +74,10 @@ defmodule EcampusWeb.LessonTopicLiveTest do
     test "deletes lesson_topic in listing", %{conn: conn, lesson_topic: lesson_topic} do
       {:ok, index_live, _html} = live(conn, ~p"/lesson_topics")
 
-      assert index_live |> element("#lesson_topics-#{lesson_topic.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#lesson_topics-#{lesson_topic.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#lesson_topics-#{lesson_topic.id}")
     end
   end

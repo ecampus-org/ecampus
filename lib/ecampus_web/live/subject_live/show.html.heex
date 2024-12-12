@@ -25,10 +25,10 @@
   show
   on_cancel={JS.patch(~p"/admin/subjects/#{@subject}")}
 >
+  <:title>{@page_title}</:title>
   <.live_component
     module={EcampusWeb.SubjectLive.FormComponent}
     id={@subject.id}
-    title={@page_title}
     action={@live_action}
     subject={@subject}
     patch={~p"/admin/subjects/#{@subject}"}
