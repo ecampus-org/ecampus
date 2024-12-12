@@ -1,75 +1,72 @@
 <main class="flex flex-col justify-start min-h-screen min-w-screen">
   <.flash_group flash={@flash} />
-  <div class="w-full h-12 flex flex-row justify-between">
+  <div class="w-full flex flex-row justify-between items-center px-2 py-4">
     <div class="flex flex-row gap-2 items-center">
-      <div class="w-12 flex flex-row justify-center items-center">
-        <u-avatar src="/logo-256.png" />
-      </div>
       e-Campus
     </div>
-    <div class="flex flex-row justify-end items-center">
-      <details class="dropdown dropdown-end">
-        <summary class="btn m-1"><.icon name="hero-swatch" /></summary>
-        <div class="dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+    <div class="dropdown dropdown-end">
+      <button class="btn btn-ghost"><.icon name="hero-swatch" /></button>
+      <div class="dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+        <%= if @current_user do %>
+          <div class="px-6">
+            <p>{@current_user.email}</p>
+          </div>
+        <% end %>
+        <ul class="menu">
           <%= if @current_user do %>
-            <div class="px-6">
-              <p>{@current_user.email}</p>
-            </div>
+            <li>
+              <.link href={~p"/users/settings"} class="link link-hover">
+                Settings
+              </.link>
+            </li>
+            <li>
+              <.link href={~p"/users/log_out"} method="delete" class="link link-hover">
+                Log out
+              </.link>
+            </li>
+          <% else %>
+            <li>
+              <.link href={~p"/users/register"} class="link link-hover">
+                Register
+              </.link>
+            </li>
+            <li>
+              <.link href={~p"/users/log_in"} class="link link-hover">
+                Log in
+              </.link>
+            </li>
           <% end %>
-          <ul class="menu">
-            <%= if @current_user do %>
-              <li>
-                <.link href={~p"/users/settings"} class="link link-hover">
-                  Settings
-                </.link>
-              </li>
-              <li>
-                <.link href={~p"/users/log_out"} method="delete" class="link link-hover">
-                  Log out
-                </.link>
-              </li>
-            <% else %>
-              <li>
-                <.link href={~p"/users/register"} class="link link-hover">
-                  Register
-                </.link>
-              </li>
-              <li>
-                <.link href={~p"/users/log_in"} class="link link-hover">
-                  Log in
-                </.link>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </details>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="flex-1 flex flex-row">
-    <div class="w-12 hidden sm:flex flex-col justify-between items-center">
-      <div class="flex flex-col justify-start gap-2">
-        <div class="tooltip tooltip-right" data-tip="Specialities">
-          <.link href={~p"/admin/specialities"} class="link link-hover">
-            <.icon name="hero-swatch" />
-          </.link>
-        </div>
-        <div class="tooltip tooltip-right" data-tip="Groups">
-          <.link href={~p"/admin/groups"} class="link link-hover">
-            <.icon name="hero-user-group" />
-          </.link>
-        </div>
-        <div class="tooltip tooltip-right" data-tip="Subjects">
-          <.link href={~p"/admin/subjects"} class="link link-hover">
-            <.icon name="hero-square-3-stack-3d" />
-          </.link>
-        </div>
-        <div class="tooltip tooltip-right" data-tip="Lessons">
-          <.link href={~p"/admin/lessons"} class="link link-hover">
-            <.icon name="hero-book-open" />
-          </.link>
+    <%= if @current_user do %>
+      <div class="hidden sm:flex flex-col justify-between items-center pl-2">
+        <div class="flex flex-col justify-start gap-2 ">
+          <div class="tooltip tooltip-right" data-tip="Specialities">
+            <.link href={~p"/admin/specialities"} class="btn btn-ghost">
+              <.icon name="hero-swatch" />
+            </.link>
+          </div>
+          <div class="tooltip tooltip-right" data-tip="Groups">
+            <.link href={~p"/admin/groups"} class="btn btn-ghost">
+              <.icon name="hero-user-group" />
+            </.link>
+          </div>
+          <div class="tooltip tooltip-right" data-tip="Subjects">
+            <.link href={~p"/admin/subjects"} class="btn btn-ghost">
+              <.icon name="hero-square-3-stack-3d" />
+            </.link>
+          </div>
+          <div class="tooltip tooltip-right" data-tip="Lessons">
+            <.link href={~p"/admin/lessons"} class="btn btn-ghost">
+              <.icon name="hero-book-open" />
+            </.link>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
     <div class="flex-1 max-h-[calc(100vh-3rem)] overflow-scroll">
       <div class="container h-full px-2 mx-auto">
         {@inner_content}
