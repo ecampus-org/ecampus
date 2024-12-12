@@ -316,13 +316,7 @@ defmodule EcampusWeb.CoreComponents do
     ~H"""
     <div>
       <.label for={@id}>{@label}</.label>
-      <select
-        id={@id}
-        name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-        multiple={@multiple}
-        {@rest}
-      >
+      <select id={@id} name={@name} class="select select-bordered w-full" multiple={@multiple} {@rest}>
         <option :if={@prompt} value="">{@prompt}</option>
         {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
@@ -483,7 +477,7 @@ defmodule EcampusWeb.CoreComponents do
         <tbody id={@id} phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}>
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="hover">
             <td
-              :for={{col, i} <- Enum.with_index(@col)}
+              :for={{col, _} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
               class={[@row_click && "hover:cursor-pointer"]}
             >
