@@ -137,6 +137,7 @@ defmodule Ecampus.Lessons do
       end)
 
     LessonTopic
+    |> preload([:lesson])
     |> Flop.validate_and_run(
       %{
         page: Map.get(params, "page", 1),
