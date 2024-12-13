@@ -50,6 +50,8 @@ defmodule EcampusWeb.CoreComponents do
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       phx-hook="Dialog"
+      phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
+      phx-key="escape"
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
     >
       <div class="modal-box w-11/12 max-w-7xl">
