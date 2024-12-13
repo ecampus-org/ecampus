@@ -1,4 +1,8 @@
 defmodule Ecampus.Lessons.LessonTopic do
+  @moduledoc """
+  The Lesson Topic context.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

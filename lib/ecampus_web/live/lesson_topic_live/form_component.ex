@@ -28,8 +28,6 @@ defmodule EcampusWeb.LessonTopicLive.FormComponent do
 
   @impl true
   def update(%{lesson_topic: lesson_topic} = assigns, socket) do
-    lesson_topic |> IO.inspect()
-
     {:ok,
      socket
      |> assign(assigns)
