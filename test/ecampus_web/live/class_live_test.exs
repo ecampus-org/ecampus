@@ -23,12 +23,14 @@ defmodule EcampusWeb.ClassLiveTest do
 
   defp create_lesson(_) do
     %{id: subject_id} = subject_fixture()
-    lesson_fixture(%{subject_id: subject_id})
+    lesson = lesson_fixture(%{subject_id: subject_id})
+    %{lesson: lesson}
   end
 
   defp create_group(_) do
     %{id: speciality_id} = speciality_fixture()
-    group_fixture(%{speciality_id: speciality_id})
+    group = group_fixture(%{speciality_id: speciality_id})
+    %{group: group}
   end
 
   defp create_class(_) do
@@ -36,7 +38,8 @@ defmodule EcampusWeb.ClassLiveTest do
     %{id: lesson_id} = lesson_fixture(%{subject_id: subject_id})
     %{id: speciality_id} = speciality_fixture()
     %{id: group_id} = group_fixture(%{speciality_id: speciality_id})
-    class_fixture(%{lesson_id: lesson_id, group_id: group_id})
+    class = class_fixture(%{lesson_id: lesson_id, group_id: group_id})
+    %{class: class}
   end
 
   setup %{conn: conn} do
@@ -49,98 +52,98 @@ defmodule EcampusWeb.ClassLiveTest do
   describe "Index" do
     setup [:create_class]
 
-    # test "lists all classes", %{conn: conn, class: class} do
-    # {:ok, _index_live, html} = live(conn, ~p"/admin/classes")
+    test "lists all classes", %{conn: conn, class: class} do
+      {:ok, _index_live, html} = live(conn, ~p"/admin/classes")
 
-    # assert html =~ "Listing Classes"
-    # assert html =~ class.classroom
-    # end
+      assert html =~ "Listing Classes"
+      assert html =~ class.classroom
+    end
 
-    # test "saves new class", %{conn: conn} do
-    #   {:ok, index_live, _html} = live(conn, ~p"/classes")
+    test "saves new class", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/admin/classes")
 
-    #   assert index_live |> element("a", "New Class") |> render_click() =~
-    #            "New Class"
+      assert index_live |> element("a", "New Class") |> render_click() =~
+               "New Class"
 
-    #   assert_patch(index_live, ~p"/classes/new")
+      assert_patch(index_live, ~p"/admin/classes/new")
 
-    #   assert index_live
-    #          |> form("#class-form", class: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
+      assert index_live
+             |> form("#class-form", class: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
-    #   assert index_live
-    #          |> form("#class-form", class: @create_attrs)
-    #          |> render_submit()
+      assert index_live
+             |> form("#class-form", class: @create_attrs)
+             |> render_submit()
 
-    #   assert_patch(index_live, ~p"/classes")
+      assert_patch(index_live, ~p"/admin/classes")
 
-    #   html = render(index_live)
-    #   assert html =~ "Class created successfully"
-    #   assert html =~ "some classroom"
-    # end
+      html = render(index_live)
+      assert html =~ "Class created successfully"
+      assert html =~ "some classroom"
+    end
 
-    # test "updates class in listing", %{conn: conn, class: class} do
-    #   {:ok, index_live, _html} = live(conn, ~p"/classes")
+    test "updates class in listing", %{conn: conn, class: class} do
+      {:ok, index_live, _html} = live(conn, ~p"/admin/classes")
 
-    #   assert index_live |> element("#classes-#{class.id} a", "Edit") |> render_click() =~
-    #            "Edit Class"
+      assert index_live |> element("#classes-#{class.id} a", "Edit") |> render_click() =~
+               "Edit Class"
 
-    #   assert_patch(index_live, ~p"/classes/#{class}/edit")
+      assert_patch(index_live, ~p"/admin/classes/#{class}/edit")
 
-    #   assert index_live
-    #          |> form("#class-form", class: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
+      assert index_live
+             |> form("#class-form", class: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
-    #   assert index_live
-    #          |> form("#class-form", class: @update_attrs)
-    #          |> render_submit()
+      assert index_live
+             |> form("#class-form", class: @update_attrs)
+             |> render_submit()
 
-    #   assert_patch(index_live, ~p"/classes")
+      assert_patch(index_live, ~p"/admin/classes")
 
-    #   html = render(index_live)
-    #   assert html =~ "Class updated successfully"
-    #   assert html =~ "some updated classroom"
-    # end
+      html = render(index_live)
+      assert html =~ "Class updated successfully"
+      assert html =~ "some updated classroom"
+    end
 
-    # test "deletes class in listing", %{conn: conn, class: class} do
-    #   {:ok, index_live, _html} = live(conn, ~p"/classes")
+    test "deletes class in listing", %{conn: conn, class: class} do
+      {:ok, index_live, _html} = live(conn, ~p"/admin/classes")
 
-    #   assert index_live |> element("#classes-#{class.id} a", "Delete") |> render_click()
-    #   refute has_element?(index_live, "#classes-#{class.id}")
-    # end
+      assert index_live |> element("#classes-#{class.id} a", "Delete") |> render_click()
+      refute has_element?(index_live, "#classes-#{class.id}")
+    end
   end
 
   describe "Show" do
     setup [:create_class]
 
-    # test "displays class", %{conn: conn, class: class} do
-    #   {:ok, _show_live, html} = live(conn, ~p"/classes/#{class}")
+    test "displays class", %{conn: conn, class: class} do
+      {:ok, _show_live, html} = live(conn, ~p"/admin/classes/#{class}")
 
-    #   assert html =~ "Show Class"
-    #   assert html =~ class.classroom
-    # end
+      assert html =~ "Show Class"
+      assert html =~ class.classroom
+    end
 
-    # test "updates class within modal", %{conn: conn, class: class} do
-    #   {:ok, show_live, _html} = live(conn, ~p"/classes/#{class}")
+    test "updates class within modal", %{conn: conn, class: class} do
+      {:ok, show_live, _html} = live(conn, ~p"/admin/classes/#{class}")
 
-    #   assert show_live |> element("a", "Edit") |> render_click() =~
-    #            "Edit Class"
+      assert show_live |> element("a", "Edit") |> render_click() =~
+               "Edit Class"
 
-    #   assert_patch(show_live, ~p"/classes/#{class}/show/edit")
+      assert_patch(show_live, ~p"/admin/classes/#{class}/show/edit")
 
-    #   assert show_live
-    #          |> form("#class-form", class: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
+      assert show_live
+             |> form("#class-form", class: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
-    #   assert show_live
-    #          |> form("#class-form", class: @update_attrs)
-    #          |> render_submit()
+      assert show_live
+             |> form("#class-form", class: @update_attrs)
+             |> render_submit()
 
-    #   assert_patch(show_live, ~p"/classes/#{class}")
+      assert_patch(show_live, ~p"/admin/classes/#{class}")
 
-    #   html = render(show_live)
-    #   assert html =~ "Class updated successfully"
-    #   assert html =~ "some updated classroom"
-    # end
+      html = render(show_live)
+      assert html =~ "Class updated successfully"
+      assert html =~ "some updated classroom"
+    end
   end
 end

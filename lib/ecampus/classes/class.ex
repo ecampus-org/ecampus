@@ -1,4 +1,8 @@
 defmodule Ecampus.Classes.Class do
+  @moduledoc """
+  The Class context.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
