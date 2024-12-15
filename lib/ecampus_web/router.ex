@@ -72,7 +72,7 @@ defmodule EcampusWeb.Router do
   end
 
   scope "/admin", EcampusWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser, :require_authenticated_admin]
 
     live_session :require_admin,
       on_mount: [{EcampusWeb.UserAuth, :ensure_authenticated}] do
