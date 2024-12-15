@@ -114,6 +114,15 @@ defmodule EcampusWeb.Router do
     end
   end
 
+  scope "/dashboard", EcampusWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :require_authenticated_student,
+      on_mount: [{EcampusWeb.UserAuth, :ensure_authenticated}] do
+      live "/classes", Dashboard.ClassLive.Index, :index
+    end
+  end
+
   scope "/", EcampusWeb do
     pipe_through [:browser]
 
