@@ -10,12 +10,22 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
 
     today = Date.utc_today()
     calendar_days = calculate_calendar_days(today)
+    classes_by_date = group_classes_by_date(classes)
 
     {:ok,
      socket
      |> assign(:pagination, pagination)
      |> assign(:calendar_days, calendar_days)
+     |> assign(:classes_by_date, classes_by_date)
      |> stream(:classes, classes)}
+  end
+
+  defp group_classes_by_date(classes) do
+    classes
+    |> Enum.group_by(fn class ->
+      class.begin_date
+      |> DateTime.to_date()
+    end)
   end
 
   @impl true
@@ -48,36 +58,44 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
 
   @impl true
   def handle_event("prev_month", _params, socket) do
-    {:noreply, socket}
-    # current_date = socket.assigns[:calendar_days] |> hd() |> Map.get(:date)
-    # new_date = shift_month(current_date.year, current_date.month, -1)
+    current_date = socket.assigns[:calendar_days] |> hd() |> Map.get(:date)
+    new_date = Cldr.Calendar.minus(current_date, :months, 1)
 
-    # {:noreply, socket |> assign(:calendar_days, calculate_calendar_days(new_date))}
+    {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
+
+    calendar_days = calculate_calendar_days(new_date)
+    classes_by_date = group_classes_by_date(classes)
+
+    {:noreply,
+     socket
+     |> assign(:pagination, pagination)
+     |> assign(:calendar_days, calendar_days)
+     |> assign(:classes_by_date, classes_by_date)
+     |> stream(:classes, classes)}
   end
 
   @impl true
   def handle_event("next_month", _params, socket) do
-    {:noreply, socket}
-    # current_date = socket.assigns[:calendar_days] |> hd() |> Map.get(:date)
-    # new_date = shift_month(current_date.year, current_date.month, 1)
+    current_date = socket.assigns[:calendar_days] |> hd() |> Map.get(:date)
+    new_date = Cldr.Calendar.plus(current_date, :months, 1)
 
-    # {:noreply, socket |> assign(:calendar_days, calculate_calendar_days(new_date))}
-  end
+    {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
 
-  defp shift_month(year, month, shift) do
-    new_month = month + shift
+    calendar_days = calculate_calendar_days(new_date)
+    classes_by_date = group_classes_by_date(classes)
 
-    cond do
-      new_month < 1 -> %{year: year - 1, month: 12}
-      new_month > 12 -> %{year: year + 1, month: 1}
-      true -> %{year: year, month: new_month}
-    end
+    {:noreply,
+     socket
+     |> assign(:pagination, pagination)
+     |> assign(:calendar_days, calendar_days)
+     |> assign(:classes_by_date, classes_by_date)
+     |> stream(:classes, classes)}
   end
 
   def calendar(assigns) do
     ~H"""
     <div class="flex flex-col h-screen">
-      <header class="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
+      <header class="py-4 px-6 flex justify-between items-center">
         <button phx-click="prev_month" class="btn btn-sm btn-outline">Предыдущий</button>
         <h1 class="text-lg font-bold">Календарь на текущий месяц</h1>
         <button phx-click="next_month" class="btn btn-sm btn-outline">Следующий</button>
@@ -93,7 +111,32 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
 
         <%= for day <- assigns[:calendar_days] do %>
           <div class={"p-4 text-center border #{if day[:current_month], do: "bg-base-200", else: "bg-base-100"}"}>
-            {day[:date].day}
+            <div>{day[:date].day}</div>
+
+            <div class="flex flex-col gap-1 justify-start ">
+              <%= for event <- Map.get(assigns[:classes_by_date], day[:date], []) do %>
+                <div
+                  class="tooltip tooltip-top"
+                  data-tip={event.lesson.subject.title <>
+                  ", аудитория " <>
+                  event.classroom <>
+                  ", " <>
+                  Calendar.strftime(
+                      event.begin_date,
+                      "%H:%M"
+                    ) <>
+                  " - " <>
+                  Calendar.strftime(
+                      event.end_date,
+                      "%H:%M"
+                    )}
+                >
+                  <div class="badge badge-primary badge-lg w-full text-nowrap text-left truncate cursor-pointer">
+                    {event.lesson.subject.short_title} {event.classroom}
+                  </div>
+                </div>
+              <% end %>
+            </div>
           </div>
         <% end %>
       </div>

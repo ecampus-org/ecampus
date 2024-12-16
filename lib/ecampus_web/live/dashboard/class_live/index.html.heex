@@ -2,18 +2,7 @@
   Listing Classes
 </.header>
 
-<.table
-  id="classes"
-  rows={@streams.classes}
-  row_click={fn {_id, class} -> JS.navigate(~p"/admin/classes/#{class}") end}
->
-  <:col :let={{_id, class}} label="ID">{class.id}</:col>
-  <:col :let={{_id, class}} label="Begin date">{class.begin_date}</:col>
-  <:col :let={{_id, class}} label="End date">{class.end_date}</:col>
-  <:col :let={{_id, class}} label="Classroom">{class.classroom}</:col>
-</.table>
-
-<.calendar calendar_days={@calendar_days} />
+<.calendar calendar_days={@calendar_days} classes_by_date={@classes_by_date} />
 
 <.modal
   :if={@live_action in [:new, :edit]}

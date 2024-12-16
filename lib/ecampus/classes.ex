@@ -45,7 +45,7 @@ defmodule Ecampus.Classes do
       end)
 
     Class
-    |> preload([:lesson, :group])
+    |> preload([:lesson, :group, lesson: [:subject]])
     |> Flop.validate_and_run(
       %{
         page: Map.get(params, "page", 1),
@@ -73,7 +73,8 @@ defmodule Ecampus.Classes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_class!(id), do: Repo.get!(Class, id) |> Repo.preload([:lesson, :group])
+  def get_class!(id),
+    do: Repo.get!(Class, id) |> Repo.preload([:lesson, :group, lesson: [:subject]])
 
   @doc """
   Creates a class.
@@ -93,7 +94,7 @@ defmodule Ecampus.Classes do
       |> Class.changeset(attrs)
 
     with {:ok, class} <- Repo.insert(changeset) do
-      {:ok, Repo.preload(class, [:lesson, :group])}
+      {:ok, Repo.preload(class, [:lesson, :group, lesson: [:subject]])}
     end
   end
 
@@ -115,7 +116,7 @@ defmodule Ecampus.Classes do
       |> Class.changeset(attrs)
 
     with {:ok, class} <- Repo.update(changeset) do
-      {:ok, Repo.preload(class, [:lesson, :group])}
+      {:ok, Repo.preload(class, [:lesson, :group, lesson: [:subject]])}
     end
   end
 
