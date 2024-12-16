@@ -119,7 +119,8 @@ defmodule EcampusWeb.Router do
 
     live_session :require_authenticated_student,
       on_mount: [{EcampusWeb.UserAuth, :ensure_authenticated}] do
-      live "/classes", Dashboard.ClassLive.Index, :index
+      live "/", Dashboard.Index, :index
+      live "/schedule", Dashboard.ScheduleLive.Index, :index
     end
   end
 

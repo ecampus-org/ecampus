@@ -1,4 +1,4 @@
-defmodule EcampusWeb.Dashboard.ClassLive.Index do
+defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
   use EcampusWeb, :live_view
 
   alias Ecampus.Classes
@@ -6,7 +6,10 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
+    %{group_id: group_id} = socket.assigns[:current_user]
+
+    {:ok, %{list: classes, pagination: pagination}} =
+      Classes.list_classes(%{"group_id" => group_id})
 
     today = Date.utc_today()
     calendar_days = calculate_calendar_days(today)
@@ -18,6 +21,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
      |> assign(:calendar_days, calendar_days)
      |> assign(:classes_by_date, classes_by_date)
      |> assign(:current_date, today)
+     |> assign(:today, today)
      |> stream(:classes, classes)}
   end
 
