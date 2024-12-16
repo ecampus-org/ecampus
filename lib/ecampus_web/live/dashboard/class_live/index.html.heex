@@ -2,7 +2,11 @@
   Listing Classes
 </.header>
 
-<.calendar calendar_days={@calendar_days} classes_by_date={@classes_by_date} />
+<.calendar
+  calendar_days={@calendar_days}
+  classes_by_date={@classes_by_date}
+  current_date={@current_date}
+/>
 
 <.modal
   :if={@live_action in [:new, :edit]}

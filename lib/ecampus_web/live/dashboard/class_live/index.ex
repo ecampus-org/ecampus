@@ -17,6 +17,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
      |> assign(:pagination, pagination)
      |> assign(:calendar_days, calendar_days)
      |> assign(:classes_by_date, classes_by_date)
+     |> assign(:current_date, today)
      |> stream(:classes, classes)}
   end
 
@@ -58,8 +59,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
 
   @impl true
   def handle_event("prev_month", _params, socket) do
-    current_date = socket.assigns[:calendar_days] |> hd() |> Map.get(:date)
-    new_date = Cldr.Calendar.minus(current_date, :months, 1)
+    new_date = socket.assigns[:current_date] |> Cldr.Calendar.minus(:months, 1)
 
     {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
 
@@ -71,13 +71,13 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
      |> assign(:pagination, pagination)
      |> assign(:calendar_days, calendar_days)
      |> assign(:classes_by_date, classes_by_date)
+     |> assign(:current_date, new_date)
      |> stream(:classes, classes)}
   end
 
   @impl true
   def handle_event("next_month", _params, socket) do
-    current_date = socket.assigns[:calendar_days] |> hd() |> Map.get(:date)
-    new_date = Cldr.Calendar.plus(current_date, :months, 1)
+    new_date = socket.assigns[:current_date] |> Cldr.Calendar.plus(:months, 1)
 
     {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
 
@@ -89,18 +89,26 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
      |> assign(:pagination, pagination)
      |> assign(:calendar_days, calendar_days)
      |> assign(:classes_by_date, classes_by_date)
+     |> assign(:current_date, new_date)
      |> stream(:classes, classes)}
   end
 
   def calendar(assigns) do
     ~H"""
     <div class="flex flex-col h-screen">
-      <header class="py-4 px-6 flex justify-between items-center">
-        <button phx-click="prev_month" class="btn btn-sm btn-outline">Предыдущий</button>
-        <h1 class="text-lg font-bold">Календарь на текущий месяц</h1>
-        <button phx-click="next_month" class="btn btn-sm btn-outline">Следующий</button>
+      <header class="py-4 flex justify-end items-center gap-2">
+        <h1 class="text-lg font-bold">
+          {Calendar.strftime(assigns[:current_date], "%B %Y")}
+        </h1>
+        <button phx-click="prev_month" class="btn btn-sm btn-ghost">
+          <.icon name="hero-chevron-left" />
+        </button>
+
+        <button phx-click="next_month" class="btn btn-sm btn-ghost">
+          <.icon name="hero-chevron-right" />
+        </button>
       </header>
-      <div class="flex-1 grid grid-cols-7 grid-rows-[auto,repeat(5,minmax(0,1fr))] bg-base-100">
+      <div class="flex-1 grid grid-cols-7 grid-rows-[auto,repeat(6,minmax(0,1fr))] bg-base-100">
         <div class="font-bold text-center p-2">Пн</div>
         <div class="font-bold text-center p-2">Вт</div>
         <div class="font-bold text-center p-2">Ср</div>
