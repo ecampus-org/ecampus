@@ -41,7 +41,7 @@ defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Class")
-    |> assign(:class, Classes.get_class!(id))
+    |> assign(:class, Classes.get_class(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -143,9 +143,11 @@ defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
                       "%H:%M"
                     )}
                 >
-                  <div class="badge badge-primary badge-lg w-full text-nowrap text-left truncate cursor-pointer">
-                    {event.lesson.subject.short_title} {event.classroom}
-                  </div>
+                  <.link patch={~p"/dashboard/classes/#{event.id}"}>
+                    <div class="badge badge-primary badge-lg w-full text-nowrap text-left truncate cursor-pointer">
+                      {event.lesson.subject.short_title} {event.classroom}
+                    </div>
+                  </.link>
                 </div>
               <% end %>
             </div>

@@ -121,6 +121,7 @@ defmodule EcampusWeb.Router do
       on_mount: [{EcampusWeb.UserAuth, :ensure_authenticated}] do
       live "/", Dashboard.Index, :index
       live "/schedule", Dashboard.ScheduleLive.Index, :index
+      live "/classes/:id", Dashboard.ClassLive.Index, :index
     end
   end
 

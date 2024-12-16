@@ -68,15 +68,15 @@ defmodule Ecampus.Classes do
 
   ## Examples
 
-      iex> get_class!(123)
+      iex> get_class(123)
       %Class{}
 
-      iex> get_class!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_class(456)
+      nil
 
   """
-  def get_class!(id),
-    do: Repo.get!(Class, id) |> Repo.preload([:lesson, :group, lesson: [:subject]])
+  def get_class(id),
+    do: Repo.get(Class, id) |> Repo.preload([:lesson, :group, lesson: [:subject]])
 
   @doc """
   Creates a class.
