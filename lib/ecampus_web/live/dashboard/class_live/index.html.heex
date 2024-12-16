@@ -13,7 +13,15 @@
 </.list>
 
 <div class="mt-5">
-  <.table id="lesson_topics" rows={@lesson_topics}>
+  <.table
+    id="lesson_topics"
+    rows={@lesson_topics}
+    row_click={
+      fn lesson_topic ->
+        JS.navigate("/dashboard/classes/#{@class.id}/topics/#{lesson_topic.id}")
+      end
+    }
+  >
     <:col :let={lesson_topic} label="Lesson topics">{lesson_topic.title}</:col>
   </.table>
 </div>

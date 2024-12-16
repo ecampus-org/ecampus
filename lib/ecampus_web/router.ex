@@ -122,6 +122,7 @@ defmodule EcampusWeb.Router do
       live "/", Dashboard.Index, :index
       live "/schedule", Dashboard.ScheduleLive.Index, :index
       live "/classes/:id", Dashboard.ClassLive.Index, :index
+      live "/classes/:class_id/topics/:id", Dashboard.ClassLive.Topic, :topic
     end
   end
 
