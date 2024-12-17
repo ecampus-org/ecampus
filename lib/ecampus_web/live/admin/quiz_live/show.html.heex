@@ -1,0 +1,28 @@
+<.header>
+  Quiz {@quiz.id}
+  <:subtitle>This is a quiz record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/quizzes/#{@quiz}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit quiz</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title">{@quiz.title}</:item>
+  <:item title="Description">{@quiz.description}</:item>
+  <:item title="Questions per attempt">{@quiz.questions_per_attempt}</:item>
+</.list>
+
+<.back navigate={~p"/quizzes"}>Back to quizzes</.back>
+
+<.modal :if={@live_action == :edit} id="quiz-modal" show on_cancel={JS.patch(~p"/quizzes/#{@quiz}")}>
+  <.live_component
+    module={EcampusWeb.QuizLive.FormComponent}
+    id={@quiz.id}
+    title={@page_title}
+    action={@live_action}
+    quiz={@quiz}
+    patch={~p"/quizzes/#{@quiz}"}
+  />
+</.modal>
