@@ -9,11 +9,14 @@ defmodule EcampusWeb.QuizLive.Show do
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _, socket) do
+  def handle_params(%{"id" => id, "lesson_id" => lesson_id}, _, socket) do
+    quiz = Quizzes.get_quiz(id)
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:quiz, Quizzes.get_quiz!(id))}
+     |> assign(:lesson_id, lesson_id)
+     |> assign(:quiz, quiz)}
   end
 
   defp page_title(:show), do: "Show Quiz"

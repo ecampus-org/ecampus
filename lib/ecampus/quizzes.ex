@@ -54,11 +54,11 @@ defmodule Ecampus.Quizzes do
 
   ## Examples
 
-      iex> get_quiz!(123)
+      iex> get_quiz(123)
       %Quiz{}
 
-      iex> get_quiz!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_quiz(456)
+      nil
 
   """
   def get_quiz(id), do: Repo.get(Quiz, id) |> Repo.preload(:lesson)

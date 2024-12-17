@@ -5,8 +5,15 @@ defmodule EcampusWeb.QuizLive.Index do
   alias Ecampus.Quizzes.Quiz
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, stream(socket, :quizzes, Quizzes.list_quizzes())}
+  def mount(%{"lesson_id" => lesson_id}, _session, socket) do
+    {:ok, %{list: quizzes, pagination: pagination}} =
+      Quizzes.list_quizzes()
+
+    {:ok,
+     socket
+     |> assign(:pagination, pagination)
+     |> assign(:lesson_id, String.to_integer(lesson_id))
+     |> stream(:quizzes, quizzes)}
   end
 
   @impl true
@@ -17,7 +24,7 @@ defmodule EcampusWeb.QuizLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Quiz")
-    |> assign(:quiz, Quizzes.get_quiz!(id))
+    |> assign(:quiz, Quizzes.get_quiz(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -39,7 +46,7 @@ defmodule EcampusWeb.QuizLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    quiz = Quizzes.get_quiz!(id)
+    quiz = Quizzes.get_quiz(id)
     {:ok, _} = Quizzes.delete_quiz(quiz)
 
     {:noreply, stream_delete(socket, :quizzes, quiz)}

@@ -7,11 +7,6 @@ defmodule EcampusWeb.QuizLive.FormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <.header>
-        {@title}
-        <:subtitle>Use this form to manage quiz records in your database.</:subtitle>
-      </.header>
-
       <.simple_form
         for={@form}
         id="quiz-form"
@@ -21,6 +16,7 @@ defmodule EcampusWeb.QuizLive.FormComponent do
       >
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:description]} type="text" label="Description" />
+        <.input field={@form[:lesson_id]} type="hidden" value={@lesson_id} />
         <.input field={@form[:questions_per_attempt]} type="number" label="Questions per attempt" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Quiz</.button>
