@@ -64,8 +64,10 @@ defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
   @impl true
   def handle_event("prev_month", _params, socket) do
     new_date = socket.assigns[:current_date] |> Cldr.Calendar.minus(:months, 1)
+    %{group_id: group_id} = socket.assigns[:current_user]
 
-    {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
+    {:ok, %{list: classes, pagination: pagination}} =
+      Classes.list_classes(%{"group_id" => group_id})
 
     calendar_days = calculate_calendar_days(new_date)
     classes_by_date = group_classes_by_date(classes)
@@ -83,7 +85,10 @@ defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
   def handle_event("next_month", _params, socket) do
     new_date = socket.assigns[:current_date] |> Cldr.Calendar.plus(:months, 1)
 
-    {:ok, %{list: classes, pagination: pagination}} = Classes.list_classes()
+    %{group_id: group_id} = socket.assigns[:current_user]
+
+    {:ok, %{list: classes, pagination: pagination}} =
+      Classes.list_classes(%{"group_id" => group_id})
 
     calendar_days = calculate_calendar_days(new_date)
     classes_by_date = group_classes_by_date(classes)
