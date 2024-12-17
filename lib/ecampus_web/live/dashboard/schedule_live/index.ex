@@ -127,10 +127,15 @@ defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
         <div class="font-bold text-center p-2">Вс</div>
 
         <%= for day <- assigns[:calendar_days] do %>
-          <div class={"p-4 text-center border #{if day[:current_month], do: "bg-base-200", else: "bg-base-100"}"}>
-            <div>{day[:date].day}</div>
+          <div class={"p-4 flex flex-col items-center border #{if day[:current_month], do: "bg-base-200", else: "bg-base-100"}"}>
+            <div class={[
+              "w-8 h-8 flex justify-center items-center rounded-full",
+              @today == day[:date] && " bg-primary text-primary-content"
+            ]}>
+              {day[:date].day}
+            </div>
 
-            <div class="flex flex-col gap-1 justify-start ">
+            <div class="flex flex-col gap-1 justify-start w-full">
               <%= for event <- Map.get(assigns[:classes_by_date], day[:date], []) do %>
                 <div
                   class="tooltip tooltip-top"
