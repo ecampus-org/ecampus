@@ -44,8 +44,6 @@ defmodule Ecampus.Classes do
           acc
       end)
 
-    filters |> IO.inspect()
-
     Class
     |> preload([:lesson, :group, lesson: [:subject]])
     |> Flop.validate_and_run(

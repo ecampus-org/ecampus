@@ -1,4 +1,8 @@
 defmodule EcampusWeb.Dashboard.Index do
+  @moduledoc """
+  This module contains the dashboard
+  """
+
   use EcampusWeb, :live_view
 
   @impl true

@@ -1,4 +1,7 @@
 defmodule EcampusWeb.MdRenderer do
+  @moduledoc """
+  This module contains functions to render custom markdown content
+  """
   @stop_rendering_flag "<!-- Rendering stopped -->"
 
   def parse_markdown(lesson_topic) do
