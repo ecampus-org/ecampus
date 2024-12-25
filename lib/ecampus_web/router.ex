@@ -112,7 +112,7 @@ defmodule EcampusWeb.Router do
       live "/lessons/:lesson_id/quizzes/:id", QuizLive.Show, :show
       live "/lessons/:lesson_id/quizzes/:id/show/edit", QuizLive.Show, :edit
 
-      live "/lessons/:lesson_id/quizzes/:id/questions", QuestionLive.Index, :index
+      live "/lessons/:lesson_id/quizzes/:quiz_id/questions", QuestionLive.Index, :index
       live "/lessons/:lesson_id/quizzes/:quiz_id/questions/new", QuestionLive.Index, :new
       live "/lessons/:lesson_id/quizzes/:quiz_id/questions/:id/edit", QuestionLive.Index, :edit
       live "/lessons/:lesson_id/quizzes/:quiz_id/questions/:id", QuestionLive.Show, :show

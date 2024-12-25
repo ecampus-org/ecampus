@@ -5,8 +5,16 @@ defmodule EcampusWeb.QuestionLive.Index do
   alias Ecampus.Quizzes.Question
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, stream(socket, :questions, Quizzes.list_questions())}
+  def mount(%{"lesson_id" => lesson_id, "quiz_id" => quiz_id}, _session, socket) do
+    {:ok, %{list: questions, pagination: pagination}} =
+      Quizzes.list_questions()
+
+    {:ok,
+     socket
+     |> assign(:pagination, pagination)
+     |> assign(:lesson_id, String.to_integer(lesson_id))
+     |> assign(:quiz_id, String.to_integer(quiz_id))
+     |> stream(:questions, questions)}
   end
 
   @impl true

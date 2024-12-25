@@ -1,7 +1,7 @@
 <.header>
   Listing Questions
   <:actions>
-    <.link patch={~p"/questions/new"}>
+    <.link patch={~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz_id}/questions/new"}>
       <.button>New Question</.button>
     </.link>
   </:actions>
@@ -10,7 +10,11 @@
 <.table
   id="questions"
   rows={@streams.questions}
-  row_click={fn {_id, question} -> JS.navigate(~p"/questions/#{question}") end}
+  row_click={
+    fn {_id, question} ->
+      JS.navigate(~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz_id}/questions/#{question}")
+    end
+  }
 >
   <:col :let={{_id, question}} label="Type">{question.type}</:col>
   <:col :let={{_id, question}} label="Title">{question.title}</:col>
@@ -19,9 +23,13 @@
   <:col :let={{_id, question}} label="Show correct answer">{question.show_correct_answer}</:col>
   <:action :let={{_id, question}}>
     <div class="sr-only">
-      <.link navigate={~p"/questions/#{question}"}>Show</.link>
+      <.link navigate={~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz_id}/questions/#{question}"}>
+        Show
+      </.link>
     </div>
-    <.link patch={~p"/questions/#{question}/edit"}>Edit</.link>
+    <.link patch={~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz_id}/questions/#{question}/edit"}>
+      Edit
+    </.link>
   </:action>
   <:action :let={{id, question}}>
     <.link
@@ -33,13 +41,19 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="question-modal" show on_cancel={JS.patch(~p"/questions")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="question-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz_id}/questions")}
+>
+  <:title>{@page_title}</:title>
   <.live_component
     module={EcampusWeb.QuestionLive.FormComponent}
     id={@question.id || :new}
-    title={@page_title}
     action={@live_action}
     question={@question}
-    patch={~p"/questions"}
+    quiz_id={@quiz_id}
+    patch={~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz_id}/questions"}
   />
 </.modal>

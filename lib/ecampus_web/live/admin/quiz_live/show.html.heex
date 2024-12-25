@@ -8,6 +8,12 @@
     >
       <.button>Edit quiz</.button>
     </.link>
+    <.link
+      patch={~p"/admin/lessons/#{@lesson_id}/quizzes/#{@quiz}/questions"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Questions</.button>
+    </.link>
   </:actions>
 </.header>
 
