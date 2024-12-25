@@ -135,4 +135,132 @@ defmodule Ecampus.Quizzes do
   def change_quiz(%Quiz{} = quiz, attrs \\ %{}) do
     Quiz.changeset(quiz, attrs)
   end
+
+  alias Ecampus.Quizzes.Question
+
+  @doc """
+  Returns the list of questions.
+
+  ## Examples
+
+      iex> list_questions()
+      [%Question{}, ...]
+
+  """
+  def list_questions(params \\ %{}) do
+    filters = []
+
+    filters =
+      params
+      |> Enum.reduce(filters, fn
+        {"quiz_id", quiz_id}, acc ->
+          [%{field: :quiz_id, value: quiz_id} | acc]
+
+        _, acc ->
+          acc
+      end)
+
+    Question
+    |> preload([:quiz])
+    |> Flop.validate_and_run(
+      %{
+        page: Map.get(params, "page", 1),
+        page_size: Map.get(params, "page_size", 10),
+        filters: filters,
+        order_by: [:id],
+        order_directions: [:asc]
+      },
+      for: Quiz
+    )
+    |> with_pagination()
+  end
+
+  @doc """
+  Gets a single question.
+
+  Raises `Ecto.NoResultsError` if the Question does not exist.
+
+  ## Examples
+
+      iex> get_question(123)
+      %Question{}
+
+      iex> get_question(456)
+      nil
+
+  """
+  def get_question(id), do: Repo.get(Question, id) |> Repo.preload(:quiz)
+
+  @doc """
+  Creates a question.
+
+  ## Examples
+
+      iex> create_question(%{field: value})
+      {:ok, %Question{}}
+
+      iex> create_question(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_question(attrs \\ %{}) do
+    changeset =
+      %Question{}
+      |> Question.changeset(attrs)
+
+    with {:ok, question} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(question, [:quiz])}
+    end
+  end
+
+  @doc """
+  Updates a question.
+
+  ## Examples
+
+      iex> update_question(question, %{field: new_value})
+      {:ok, %Question{}}
+
+      iex> update_question(question, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_question(%Question{} = question, attrs) do
+    changeset =
+      question
+      |> Question.changeset(attrs)
+
+    with {:ok, question} <- Repo.update(changeset) do
+      {:ok, Repo.preload(question, [:quiz])}
+    end
+  end
+
+  @doc """
+  Deletes a question.
+
+  ## Examples
+
+      iex> delete_question(question)
+      {:ok, %Question{}}
+
+      iex> delete_question(question)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_question(%Question{} = question) do
+    Repo.delete(question)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking question changes.
+
+  ## Examples
+
+      iex> change_question(question)
+      %Ecto.Changeset{data: %Question{}}
+
+  """
+  def change_question(%Question{} = question, attrs \\ %{}) do
+    Question.changeset(question, attrs)
+  end
 end

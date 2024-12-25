@@ -19,4 +19,22 @@ defmodule Ecampus.QuizzesFixtures do
 
     quiz
   end
+
+  @doc """
+  Generate a question.
+  """
+  def question_fixture(attrs \\ %{}) do
+    {:ok, question} =
+      attrs
+      |> Enum.into(%{
+        grade: 42,
+        show_correct_answer: true,
+        subtitle: "some subtitle",
+        title: "some title",
+        type: :single
+      })
+      |> Ecampus.Quizzes.create_question()
+
+    question
+  end
 end
