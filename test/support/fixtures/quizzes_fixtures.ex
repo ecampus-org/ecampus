@@ -37,4 +37,21 @@ defmodule Ecampus.QuizzesFixtures do
 
     question
   end
+
+  @doc """
+  Generate a answer.
+  """
+  def answer_fixture(attrs \\ %{}) do
+    {:ok, answer} =
+      attrs
+      |> Enum.into(%{
+        is_correct: true,
+        sequence_order_number: 42,
+        subtitle: "some subtitle",
+        title: "some title"
+      })
+      |> Ecampus.Quizzes.create_answer()
+
+    answer
+  end
 end

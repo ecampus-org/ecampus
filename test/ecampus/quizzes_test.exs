@@ -160,6 +160,84 @@ defmodule Ecampus.QuizzesTest do
     end
   end
 
+  describe "answers" do
+    alias Ecampus.Quizzes.Answer
+
+    import Ecampus.QuizzesFixtures
+
+    @invalid_attrs %{title: nil, subtitle: nil, is_correct: nil, sequence_order_number: nil}
+
+    test "list_answers/0 returns all answers" do
+      answer = create_answer()
+      assert Quizzes.list_answers() == [answer]
+    end
+
+    test "get_answer!/1 returns the answer with given id" do
+      answer = create_answer()
+      assert Quizzes.get_answer(answer.id) == answer
+    end
+
+    test "create_answer/1 with valid data creates a answer" do
+      %{id: question_id} = create_question()
+
+      valid_attrs = %{
+        title: "some title",
+        subtitle: "some subtitle",
+        is_correct: true,
+        sequence_order_number: 42,
+        question_id: question_id
+      }
+
+      assert {:ok, %Answer{} = answer} = Quizzes.create_answer(valid_attrs)
+      assert answer.title == valid_attrs.title
+      assert answer.subtitle == valid_attrs.subtitle
+      assert answer.is_correct == valid_attrs.is_correct
+      assert answer.sequence_order_number == valid_attrs.sequence_order_number
+      assert answer.question_id == valid_attrs.question_id
+    end
+
+    test "create_answer/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Quizzes.create_answer(@invalid_attrs)
+    end
+
+    test "update_answer/2 with valid data updates the answer" do
+      %{id: question_id} = create_question()
+      answer = create_answer()
+
+      update_attrs = %{
+        title: "some updated title",
+        subtitle: "some updated subtitle",
+        is_correct: false,
+        sequence_order_number: 43,
+        question_id: question_id
+      }
+
+      assert {:ok, %Answer{} = answer} = Quizzes.update_answer(answer, update_attrs)
+      assert answer.title == update_attrs.title
+      assert answer.subtitle == update_attrs.subtitle
+      assert answer.is_correct == update_attrs.is_correct
+      assert answer.sequence_order_number == update_attrs.sequence_order_number
+      assert answer.question_id == update_attrs.question_id
+    end
+
+    test "update_answer/2 with invalid data returns error changeset" do
+      answer = create_answer()
+      assert {:error, %Ecto.Changeset{}} = Quizzes.update_answer(answer, @invalid_attrs)
+      assert answer == Quizzes.get_answer(answer.id)
+    end
+
+    test "delete_answer/1 deletes the answer" do
+      answer = create_answer()
+      assert {:ok, %Answer{}} = Quizzes.delete_answer(answer)
+      assert nil == Quizzes.get_answer(answer.id)
+    end
+
+    test "change_answer/1 returns a answer changeset" do
+      answer = create_answer()
+      assert %Ecto.Changeset{} = Quizzes.change_answer(answer)
+    end
+  end
+
   defp create_lesson() do
     %{id: subject_id} = subject_fixture()
     lesson_fixture(%{subject_id: subject_id})
@@ -176,5 +254,13 @@ defmodule Ecampus.QuizzesTest do
     %{id: lesson_id} = lesson_fixture(%{subject_id: subject_id})
     %{id: quiz_id} = quiz_fixture(%{lesson_id: lesson_id})
     question_fixture(%{quiz_id: quiz_id})
+  end
+
+  defp create_answer() do
+    %{id: subject_id} = subject_fixture()
+    %{id: lesson_id} = lesson_fixture(%{subject_id: subject_id})
+    %{id: quiz_id} = quiz_fixture(%{lesson_id: lesson_id})
+    %{id: question_id} = question_fixture(%{quiz_id: quiz_id})
+    answer_fixture(%{question_id: question_id})
   end
 end
