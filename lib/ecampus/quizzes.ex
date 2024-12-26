@@ -161,7 +161,7 @@ defmodule Ecampus.Quizzes do
       end)
 
     Question
-    |> preload([:quiz])
+    |> preload([:quiz, :answers])
     |> Flop.validate_and_run(
       %{
         page: Map.get(params, "page", 1),
@@ -189,7 +189,7 @@ defmodule Ecampus.Quizzes do
       nil
 
   """
-  def get_question(id), do: Repo.get(Question, id) |> Repo.preload(:quiz)
+  def get_question(id), do: Repo.get(Question, id) |> Repo.preload([:quiz, :answers])
 
   @doc """
   Creates a question.
@@ -209,7 +209,7 @@ defmodule Ecampus.Quizzes do
       |> Question.changeset(attrs)
 
     with {:ok, question} <- Repo.insert(changeset) do
-      {:ok, Repo.preload(question, [:quiz])}
+      {:ok, Repo.preload(question, [:quiz, :answers])}
     end
   end
 
@@ -231,7 +231,7 @@ defmodule Ecampus.Quizzes do
       |> Question.changeset(attrs)
 
     with {:ok, question} <- Repo.update(changeset) do
-      {:ok, Repo.preload(question, [:quiz])}
+      {:ok, Repo.preload(question, [:quiz, :answers])}
     end
   end
 

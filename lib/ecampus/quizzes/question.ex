@@ -19,6 +19,7 @@ defmodule Ecampus.Quizzes.Question do
     field :grade, :integer
     field :show_correct_answer, :boolean, default: false
     belongs_to :quiz, Ecampus.Quizzes.Quiz
+    has_many :answers, Ecampus.Quizzes.Answer
 
     timestamps(type: :utc_datetime)
   end

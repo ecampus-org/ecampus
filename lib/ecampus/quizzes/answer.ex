@@ -1,4 +1,8 @@
 defmodule Ecampus.Quizzes.Answer do
+  @moduledoc """
+  The Quiz Question context.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
