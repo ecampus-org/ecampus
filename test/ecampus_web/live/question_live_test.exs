@@ -9,7 +9,7 @@ defmodule EcampusWeb.QuestionLiveTest do
   import Ecampus.QuizzesFixtures
 
   @create_attrs %{
-    type: :single,
+    type: :multiple,
     title: "some title",
     subtitle: "some subtitle",
     grade: 42,

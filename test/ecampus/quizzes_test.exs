@@ -19,6 +19,12 @@ defmodule Ecampus.QuizzesTest do
       assert list == [quiz]
     end
 
+    test "list_all_quizzes/0 returns all quizzes" do
+      quiz = create_quiz()
+      list = Quizzes.list_all_quizzes()
+      assert list == [quiz]
+    end
+
     test "get_quiz/1 returns the quiz with given id" do
       quiz = create_quiz()
       assert Quizzes.get_quiz(quiz.id) == quiz
@@ -99,7 +105,7 @@ defmodule Ecampus.QuizzesTest do
       %{id: quiz_id} = create_quiz()
 
       valid_attrs = %{
-        type: :single,
+        type: :multiple,
         title: "some title",
         subtitle: "some subtitle",
         grade: 42,

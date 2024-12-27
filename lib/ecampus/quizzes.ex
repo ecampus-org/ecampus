@@ -33,7 +33,7 @@ defmodule Ecampus.Quizzes do
       end)
 
     Quiz
-    |> preload([:lesson])
+    |> preload([:lesson, :questions])
     |> Flop.validate_and_run(
       %{
         page: Map.get(params, "page", 1),
@@ -45,6 +45,23 @@ defmodule Ecampus.Quizzes do
       for: Quiz
     )
     |> with_pagination()
+  end
+
+  def list_all_quizzes(params \\ %{}) do
+    Quiz
+    |> preload([:lesson, :questions])
+    |> apply_filters(params)
+    |> Repo.all()
+  end
+
+  defp apply_filters(query, params) do
+    Enum.reduce(params, query, fn
+      {"lesson_id", lesson_id}, query ->
+        where(query, [q], q.lesson_id == ^lesson_id)
+
+      _, query ->
+        query
+    end)
   end
 
   @doc """
@@ -61,7 +78,8 @@ defmodule Ecampus.Quizzes do
       nil
 
   """
-  def get_quiz(id), do: Repo.get(Quiz, id) |> Repo.preload(:lesson)
+  def get_quiz(id),
+    do: Repo.get(Quiz, id) |> Repo.preload([:lesson, :questions, questions: [:answers]])
 
   @doc """
   Creates a quiz.
@@ -81,7 +99,7 @@ defmodule Ecampus.Quizzes do
       |> Quiz.changeset(attrs)
 
     with {:ok, quiz} <- Repo.insert(changeset) do
-      {:ok, Repo.preload(quiz, [:lesson])}
+      {:ok, Repo.preload(quiz, [:lesson, :questions])}
     end
   end
 
@@ -103,7 +121,7 @@ defmodule Ecampus.Quizzes do
       |> Quiz.changeset(attrs)
 
     with {:ok, quiz} <- Repo.update(changeset) do
-      {:ok, Repo.preload(quiz, [:lesson])}
+      {:ok, Repo.preload(quiz, [:lesson, :questions])}
     end
   end
 

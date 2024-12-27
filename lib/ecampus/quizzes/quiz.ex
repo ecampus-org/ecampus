@@ -16,6 +16,7 @@ defmodule Ecampus.Quizzes.Quiz do
     field :title, :string
     field :questions_per_attempt, :integer
     belongs_to :lesson, Ecampus.Lessons.Lesson
+    has_many :questions, Ecampus.Quizzes.Question
 
     timestamps(type: :utc_datetime)
   end

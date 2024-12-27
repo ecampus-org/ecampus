@@ -31,7 +31,7 @@ defmodule Ecampus.QuizzesFixtures do
         show_correct_answer: true,
         subtitle: "some subtitle",
         title: "some title",
-        type: :single
+        type: :multiple
       })
       |> Ecampus.Quizzes.create_question()
 
