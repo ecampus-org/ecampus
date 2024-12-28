@@ -160,7 +160,7 @@ defmodule Ecampus.Quizzes do
           set: [answer: processed_answer, updated_at: DateTime.utc_now()]
         )
 
-        {:ok, Map.get(processed_answer, :answer_ids) == Map.get(processed_answer, :correct)}
+        {:ok}
     end
   end
 

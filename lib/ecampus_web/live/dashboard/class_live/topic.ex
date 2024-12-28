@@ -66,39 +66,17 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
         |> String.to_integer()
       end)
 
-    case(
-      Quizzes.answer_question(%{
-        question_id: question_id,
-        user_id: socket.assigns.current_user.id,
-        answer: %{answer_ids: answer_ids}
-      })
-    ) do
-      {:ok, correct} ->
-        {topic, socket} =
-          Map.get(socket.assigns, :topic)
-          |> parse_markdown(socket)
+    Quizzes.answer_question(%{
+      question_id: question_id,
+      user_id: socket.assigns.current_user.id,
+      answer: %{answer_ids: answer_ids}
+    })
 
-        socket =
-          if correct do
-            socket
-            |> put_flash(:info, "Correct answer")
-          else
-            socket
-            |> put_flash(:error, "Incorrect answer")
-          end
+    {topic, socket} =
+      Map.get(socket.assigns, :topic)
+      |> parse_markdown(socket)
 
-        {:noreply, socket |> assign(:topic, topic)}
-
-      {:error, message} ->
-        {topic, socket} =
-          Map.get(socket.assigns, :topic)
-          |> parse_markdown(socket)
-
-        {:noreply,
-         socket
-         |> put_flash(:error, message)
-         |> assign(:topic, topic)}
-    end
+    {:noreply, socket |> assign(:topic, topic)}
   end
 
   @impl true
@@ -151,7 +129,25 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           <p class="text-sm">{@question.subtitle}</p>
           <%= for answer <- @question.answers do %>
             <%= if @question.type == :multiple do %>
-              <.input name={"answer-#{answer.id}"} type="checkbox" label={answer.title} />
+              <.input
+                name={"answer-#{answer.id}"}
+                type="checkbox"
+                checked={@has_answer && answer.id in @answered_ids}
+                error={@has_answer && answer.id not in @correct_ids}
+                success={@has_answer && answer.id in @correct_ids}
+                disabled={@has_answer}
+                label={answer.title}
+              />
+              <%= if @has_answer do %>
+                <p class={[
+                  "text-xs",
+                  @has_answer && answer.id not in @correct_ids && "text-error",
+                  @has_answer && answer.id in @correct_ids &&
+                    "text-success"
+                ]}>
+                  {answer.subtitle}
+                </p>
+              <% end %>
             <% end %>
             <%= if @question.type == :sequence do %>
               <button class="btn btn-ghost">{answer.title}</button>
@@ -235,7 +231,28 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           render_quiz(%{
             quiz: quiz,
             question: question,
-            question_index: Map.get(question_indexes, quiz_id)
+            question_index: Map.get(question_indexes, quiz_id),
+            has_answer:
+              case Enum.at(question.answered_questions, 0) do
+                %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) -> true
+                _ -> false
+              end,
+            correct_ids:
+              case Enum.at(question.answered_questions, 0) do
+                %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+                  Map.get(answer, "correct", [])
+
+                _ ->
+                  []
+              end,
+            answered_ids:
+              case Enum.at(question.answered_questions, 0) do
+                %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+                  Map.get(answer, "answer_ids", [])
+
+                _ ->
+                  []
+              end
           })
           |> Phoenix.HTML.Safe.to_iodata()
           |> to_string()
