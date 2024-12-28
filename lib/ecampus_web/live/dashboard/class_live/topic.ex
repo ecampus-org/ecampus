@@ -127,8 +127,8 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           <.input name="question-id" type="hidden" value={@question.id} />
           <h3 class="card-title my-0">{@question.title}</h3>
           <p class="text-sm">{@question.subtitle}</p>
-          <%= for answer <- @question.answers do %>
-            <%= if @question.type == :multiple do %>
+          <%= if @question.type == :multiple do %>
+            <%= for answer <- @question.answers do %>
               <.input
                 name={"answer-#{answer.id}"}
                 type="checkbox"
@@ -149,9 +149,13 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
                 </p>
               <% end %>
             <% end %>
-            <%= if @question.type == :sequence do %>
-              <button class="btn btn-ghost">{answer.title}</button>
-            <% end %>
+          <% end %>
+          <%= if @question.type == :sequence do %>
+            <div class="flex flex-row flex-wrap gap-2">
+              <%= for answer <- @question.answers do %>
+                <button class="btn btn-ghost">{answer.title}</button>
+              <% end %>
+            </div>
           <% end %>
           <div class="card-actions justify-end">
             <%= if @question_index > 0 do %>
