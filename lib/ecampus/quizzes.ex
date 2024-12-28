@@ -137,6 +137,67 @@ defmodule Ecampus.Quizzes do
           |> Enum.take(quiz.questions_per_attempt)
     }
 
+  def answer_question(%{
+        question_id: question_id,
+        user_id: user_id,
+        answer: answer
+      }) do
+    case from(q in Ecampus.Quizzes.Question,
+           join: aq in assoc(q, :answered_questions),
+           where: aq.user_id == ^user_id and q.id == ^question_id and is_nil(aq.answer)
+         )
+         |> Repo.one()
+         |> Repo.preload([:answers])
+         |> apply_answer(answer) do
+      nil ->
+        {:error, "Already answered"}
+
+      processed_answer ->
+        Repo.update_all(
+          from(aq in AnsweredQuestion,
+            where: aq.user_id == ^user_id and aq.question_id == ^question_id
+          ),
+          set: [answer: processed_answer, updated_at: DateTime.utc_now()]
+        )
+
+        {:ok, Map.get(processed_answer, :answer_ids) == Map.get(processed_answer, :correct)}
+    end
+  end
+
+  defp apply_answer(%{type: :multiple} = question, %{answer_ids: answer_ids} = answer) do
+    correct_ids =
+      question.answers
+      |> Enum.filter(& &1.is_correct)
+      |> Enum.map(& &1.id)
+      |> Enum.sort()
+
+    answer_ids = answer_ids |> Enum.sort()
+
+    if answer_ids == correct_ids do
+      Map.merge(answer, %{grade: question.grade, correct: answer_ids})
+    else
+      points_per_answer = question.grade / length(correct_ids)
+
+      correct_count =
+        answer_ids
+        |> Enum.filter(&Enum.member?(correct_ids, &1))
+        |> length()
+
+      incorrect_count = length(answer_ids) - correct_count
+
+      Map.merge(answer, %{
+        grade: max(0, points_per_answer * (correct_count - incorrect_count)),
+        correct: correct_ids
+      })
+    end
+  end
+
+  defp apply_answer(nil, _), do: nil
+
+  defp apply_answer(_question, answer) do
+    Map.merge(answer, %{grade: 0})
+  end
+
   @doc """
   Creates a quiz.
 

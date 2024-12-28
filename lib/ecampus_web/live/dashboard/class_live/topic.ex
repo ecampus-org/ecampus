@@ -50,20 +50,61 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
   end
 
   @impl true
+  def handle_event(
+        "answer-question",
+        %{"question-id" => question_id} = params,
+        socket
+      ) do
+    answer_ids =
+      params
+      |> Enum.filter(fn {key, value} ->
+        String.starts_with?(key, "answer-") and value == "true"
+      end)
+      |> Enum.map(fn {key, _value} ->
+        Regex.run(~r/answer-(\d+)/, key)
+        |> List.last()
+        |> String.to_integer()
+      end)
+
+    case(
+      Quizzes.answer_question(%{
+        question_id: question_id,
+        user_id: socket.assigns.current_user.id,
+        answer: %{answer_ids: answer_ids}
+      })
+    ) do
+      {:ok, correct} ->
+        {topic, socket} =
+          Map.get(socket.assigns, :topic)
+          |> parse_markdown(socket)
+
+        socket =
+          if correct do
+            socket
+            |> put_flash(:info, "Correct answer")
+          else
+            socket
+            |> put_flash(:error, "Incorrect answer")
+          end
+
+        {:noreply, socket |> assign(:topic, topic)}
+
+      {:error, message} ->
+        {topic, socket} =
+          Map.get(socket.assigns, :topic)
+          |> parse_markdown(socket)
+
+        {:noreply,
+         socket
+         |> put_flash(:error, message)
+         |> assign(:topic, topic)}
+    end
+  end
+
+  @impl true
   def handle_event(action, %{"quiz-id" => id} = _params, socket)
       when action in ["next-question", "prev-question"] do
     quiz_id = String.to_integer(id)
-
-    # result =
-    #   params
-    #   |> Enum.filter(fn {key, value} ->
-    #     String.starts_with?(key, "answer-") and value == "true"
-    #   end)
-    #   |> Enum.map(fn {key, _value} ->
-    #     Regex.run(~r/answer-(\d+)/, key)
-    #     |> List.last()
-    #     |> String.to_integer()
-    #   end)
 
     question_indexes = Map.get(socket.assigns, :question_indexes, %{})
     quiz = Quizzes.get_started_quiz(%{quiz_id: quiz_id, user_id: socket.assigns.current_user.id})
@@ -104,8 +145,8 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           </div>
         </div>
       <% else %>
-        <form class="card-body" phx-submit="next-question">
-          <.input name="quiz-id" type="hidden" value={@quiz.id} />
+        <form class="card-body" phx-submit="answer-question">
+          <.input name="question-id" type="hidden" value={@question.id} />
           <h3 class="card-title my-0">{@question.title}</h3>
           <p class="text-sm">{@question.subtitle}</p>
           <%= for answer <- @question.answers do %>
@@ -117,12 +158,32 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
             <% end %>
           <% end %>
           <div class="card-actions justify-end">
-            <button phx-click="prev-question" phx-value-quiz-id={@quiz.id} class="btn btn-ghost">
-              Prev
-            </button>
-            <button type="submit" class="btn btn-primary">
-              Next
-            </button>
+            <%= if @question_index > 0 do %>
+              <button
+                type="button"
+                phx-click="prev-question"
+                phx-value-quiz-id={@quiz.id}
+                class="btn btn-ghost"
+              >
+                Prev
+              </button>
+            <% end %>
+            <%= if Enum.at(@question.answered_questions, 0).answer == nil do %>
+              <button type="submit" class="btn btn-primary">
+                Submit
+              </button>
+            <% else %>
+              <%= if @question_index < length(@quiz.questions) - 1 do %>
+                <button
+                  type="button"
+                  phx-click="next-question"
+                  phx-value-quiz-id={@quiz.id}
+                  class="btn btn-ghost"
+                >
+                  Next
+                </button>
+              <% end %>
+            <% end %>
           </div>
         </form>
       <% end %>
@@ -173,7 +234,8 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
         quiz_html =
           render_quiz(%{
             quiz: quiz,
-            question: question
+            question: question,
+            question_index: Map.get(question_indexes, quiz_id)
           })
           |> Phoenix.HTML.Safe.to_iodata()
           |> to_string()
