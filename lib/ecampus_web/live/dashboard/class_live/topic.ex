@@ -36,16 +36,37 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
   end
 
   @impl true
-  def handle_event("start-quiz", _params, socket) do
-    {:noreply, socket}
+  def handle_event("start-quiz", %{"quiz-id" => id}, socket) do
+    quiz_id = String.to_integer(id)
+    Quizzes.start_quiz(%{quiz_id: quiz_id, user_id: socket.assigns.current_user.id})
+
+    {topic, updated_socket} =
+      Map.get(socket.assigns, :topic)
+      |> parse_markdown(socket)
+
+    {:noreply,
+     updated_socket
+     |> assign(:topic, topic)}
   end
 
   @impl true
-  def handle_event(action, %{"id" => id}, socket)
+  def handle_event(action, %{"quiz-id" => id} = _params, socket)
       when action in ["next-question", "prev-question"] do
     quiz_id = String.to_integer(id)
+
+    # result =
+    #   params
+    #   |> Enum.filter(fn {key, value} ->
+    #     String.starts_with?(key, "answer-") and value == "true"
+    #   end)
+    #   |> Enum.map(fn {key, _value} ->
+    #     Regex.run(~r/answer-(\d+)/, key)
+    #     |> List.last()
+    #     |> String.to_integer()
+    #   end)
+
     question_indexes = Map.get(socket.assigns, :question_indexes, %{})
-    quiz = Quizzes.get_quiz(quiz_id)
+    quiz = Quizzes.get_started_quiz(%{quiz_id: quiz_id, user_id: socket.assigns.current_user.id})
 
     current_question_index =
       case Map.get(question_indexes, quiz_id) do
@@ -72,35 +93,39 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
   defp render_quiz(assigns) do
     ~H"""
     <div class="not-prose card shadow-md">
-      <div class="card-body">
-        <h2 class="card-title my-0">{@quiz.title}</h2>
-        <p class="text-sm">{@quiz.description}</p>
-        <div class="card-actions justify-end">
-          <button phx-click="start-quiz" phx-value-id={@quiz.id} class="btn btn-primary">
-            Begin
-          </button>
+      <%= if length(@quiz.questions) == 0 do %>
+        <div class="card-body">
+          <h2 class="card-title my-0">{@quiz.title}</h2>
+          <p class="text-sm">{@quiz.description}</p>
+          <div class="card-actions justify-end">
+            <button phx-click="start-quiz" phx-value-quiz-id={@quiz.id} class="btn btn-primary">
+              Begin
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title my-0">{@question.title}</h3>
-        <p class="text-sm">{@question.subtitle}</p>
-        <%= for answer <- @question.answers do %>
-          <%= if @question.type == :multiple do %>
-            <.input name="answer" type="checkbox" label={answer.title} />
+      <% else %>
+        <form class="card-body" phx-submit="next-question">
+          <.input name="quiz-id" type="hidden" value={@quiz.id} />
+          <h3 class="card-title my-0">{@question.title}</h3>
+          <p class="text-sm">{@question.subtitle}</p>
+          <%= for answer <- @question.answers do %>
+            <%= if @question.type == :multiple do %>
+              <.input name={"answer-#{answer.id}"} type="checkbox" label={answer.title} />
+            <% end %>
+            <%= if @question.type == :sequence do %>
+              <button class="btn btn-ghost">{answer.title}</button>
+            <% end %>
           <% end %>
-          <%= if @question.type == :sequence do %>
-            <button class="btn btn-ghost">{answer.title}</button>
-          <% end %>
-        <% end %>
-        <div class="card-actions justify-end">
-          <button phx-click="prev-question" phx-value-id={@quiz.id} class="btn btn-ghost">
-            Prev
-          </button>
-          <button phx-click="next-question" phx-value-id={@quiz.id} class="btn btn-primary">
-            Next
-          </button>
-        </div>
-      </div>
+          <div class="card-actions justify-end">
+            <button phx-click="prev-question" phx-value-quiz-id={@quiz.id} class="btn btn-ghost">
+              Prev
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Next
+            </button>
+          </div>
+        </form>
+      <% end %>
     </div>
     """
   end
@@ -140,7 +165,9 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           socket_acc
           |> assign(:question_indexes, question_indexes)
 
-        quiz = Quizzes.get_quiz(quiz_id)
+        quiz =
+          Quizzes.get_started_quiz(%{quiz_id: quiz_id, user_id: socket.assigns.current_user.id})
+
         question = Enum.at(quiz.questions, Map.get(question_indexes, quiz_id))
 
         quiz_html =

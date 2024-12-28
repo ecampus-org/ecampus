@@ -54,4 +54,18 @@ defmodule Ecampus.QuizzesFixtures do
 
     answer
   end
+
+  @doc """
+  Generate a answered_question.
+  """
+  def answered_question_fixture(attrs \\ %{}) do
+    {:ok, answered_question} =
+      attrs
+      |> Enum.into(%{
+        answer: %{}
+      })
+      |> Ecampus.Quizzes.create_answered_question()
+
+    answered_question
+  end
 end

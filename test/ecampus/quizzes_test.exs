@@ -4,11 +4,12 @@ defmodule Ecampus.QuizzesTest do
   alias Ecampus.Quizzes
   alias Ecampus.Quizzes.Quiz
   alias Ecampus.Quizzes.Question
+  alias Ecampus.Quizzes.AnsweredQuestion
 
   import Ecampus.QuizzesFixtures
   import Ecampus.LessonsFixtures
   import Ecampus.SubjectsFixtures
-  import Ecampus.QuizzesFixtures
+  import Ecampus.AccountsFixtures
 
   describe "quizzes" do
     @invalid_attrs %{description: nil, title: nil, questions_per_attempt: nil, lesson_id: nil}
@@ -244,29 +245,73 @@ defmodule Ecampus.QuizzesTest do
     end
   end
 
+  describe "answered_questions" do
+    test "list_answered_questions/0 returns all answered_questions" do
+      answered_question = create_answered_question()
+      assert Quizzes.list_answered_questions() == [answered_question]
+    end
+
+    test "get_answered_question!/1 returns the answered_question with given id" do
+      answered_question = create_answered_question()
+
+      assert Quizzes.get_answered_question(%{
+               user_id: answered_question.user_id,
+               question_id: answered_question.question_id,
+               quiz_id: answered_question.quiz_id
+             }) == answered_question
+    end
+
+    test "create_answered_question/1 with valid data creates a answered_question" do
+      %{id: question_id} = create_question()
+      %{id: user_id} = user_fixture()
+      %{id: quiz_id} = create_quiz()
+
+      valid_attrs = %{
+        answer: %{},
+        question_id: question_id,
+        user_id: user_id,
+        quiz_id: quiz_id
+      }
+
+      assert {:ok, %AnsweredQuestion{} = answered_question} =
+               Quizzes.create_answered_question(valid_attrs)
+
+      assert answered_question.answer == valid_attrs.answer
+      assert answered_question.question_id == valid_attrs.question_id
+      assert answered_question.user_id == valid_attrs.user_id
+      assert answered_question.quiz_id == valid_attrs.quiz_id
+    end
+
+    test "change_answered_question/1 returns a answered_question changeset" do
+      answered_question = create_answered_question()
+      assert %Ecto.Changeset{} = Quizzes.change_answered_question(answered_question)
+    end
+  end
+
   defp create_lesson() do
     %{id: subject_id} = subject_fixture()
     lesson_fixture(%{subject_id: subject_id})
   end
 
   defp create_quiz() do
-    %{id: subject_id} = subject_fixture()
-    %{id: lesson_id} = lesson_fixture(%{subject_id: subject_id})
+    %{id: lesson_id} = create_lesson()
     quiz_fixture(%{lesson_id: lesson_id})
   end
 
   defp create_question() do
-    %{id: subject_id} = subject_fixture()
-    %{id: lesson_id} = lesson_fixture(%{subject_id: subject_id})
-    %{id: quiz_id} = quiz_fixture(%{lesson_id: lesson_id})
+    %{id: quiz_id} = create_quiz()
     question_fixture(%{quiz_id: quiz_id})
   end
 
   defp create_answer() do
-    %{id: subject_id} = subject_fixture()
-    %{id: lesson_id} = lesson_fixture(%{subject_id: subject_id})
-    %{id: quiz_id} = quiz_fixture(%{lesson_id: lesson_id})
-    %{id: question_id} = question_fixture(%{quiz_id: quiz_id})
+    %{id: question_id} = create_question()
     answer_fixture(%{question_id: question_id})
+  end
+
+  defp create_answered_question() do
+    %{id: question_id} = create_question()
+    %{id: user_id} = user_fixture()
+    %{id: quiz_id} = create_quiz()
+    answered_question_fixture(%{question_id: question_id, user_id: user_id, quiz_id: quiz_id})
   end
 end

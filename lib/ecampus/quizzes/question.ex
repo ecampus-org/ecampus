@@ -20,6 +20,7 @@ defmodule Ecampus.Quizzes.Question do
     field :show_correct_answer, :boolean, default: false
     belongs_to :quiz, Ecampus.Quizzes.Quiz
     has_many :answers, Ecampus.Quizzes.Answer
+    has_many :answered_questions, Ecampus.Quizzes.AnsweredQuestion
 
     timestamps(type: :utc_datetime)
   end

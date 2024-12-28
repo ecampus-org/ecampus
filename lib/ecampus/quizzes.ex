@@ -9,6 +9,7 @@ defmodule Ecampus.Quizzes do
   import Ecampus.Pagination
 
   alias Ecampus.Quizzes.Quiz
+  alias Ecampus.Quizzes.AnsweredQuestion
 
   @doc """
   Returns the list of quizzes.
@@ -80,6 +81,61 @@ defmodule Ecampus.Quizzes do
   """
   def get_quiz(id),
     do: Repo.get(Quiz, id) |> Repo.preload([:lesson, :questions, questions: [:answers]])
+
+  def get_started_quiz(%{
+        quiz_id: quiz_id,
+        user_id: user_id
+      }) do
+    Repo.get!(Ecampus.Quizzes.Quiz, quiz_id)
+    |> Repo.preload(
+      questions:
+        from(q in Ecampus.Quizzes.Question,
+          join: aq in assoc(q, :answered_questions),
+          where: aq.user_id == ^user_id
+        )
+    )
+    |> Repo.preload(questions: [:answers, :answered_questions])
+  end
+
+  def start_quiz(%{
+        quiz_id: quiz_id,
+        user_id: user_id
+      }),
+      do:
+        Repo.get!(Quiz, quiz_id)
+        |> Repo.preload([:questions, questions: [:answers]])
+        |> shuffle_and_get_question()
+        |> create_empty_answered_questions(user_id)
+        |> insert_empty_answered_questions()
+
+  defp insert_empty_answered_questions(quiz) do
+    Repo.transaction(fn ->
+      Enum.each(quiz.questions, &Repo.insert(&1, []))
+    end)
+  end
+
+  defp create_empty_answered_questions(%Quiz{} = quiz, user_id),
+    do: %{
+      quiz
+      | questions:
+          Enum.map(quiz.questions, fn question ->
+            %AnsweredQuestion{}
+            |> AnsweredQuestion.changeset(%{
+              quiz_id: quiz.id,
+              question_id: question.id,
+              user_id: user_id,
+              answer: nil
+            })
+          end)
+    }
+
+  defp shuffle_and_get_question(%Quiz{} = quiz),
+    do: %{
+      quiz
+      | questions:
+          Enum.shuffle(quiz.questions)
+          |> Enum.take(quiz.questions_per_attempt)
+    }
 
   @doc """
   Creates a quiz.
@@ -384,5 +440,69 @@ defmodule Ecampus.Quizzes do
   """
   def change_answer(%Answer{} = answer, attrs \\ %{}) do
     Answer.changeset(answer, attrs)
+  end
+
+  alias Ecampus.Quizzes.AnsweredQuestion
+
+  @doc """
+  Returns the list of answered_questions.
+
+  ## Examples
+
+      iex> list_answered_questions()
+      [%AnsweredQuestion{}, ...]
+
+  """
+  def list_answered_questions do
+    Repo.all(AnsweredQuestion)
+  end
+
+  @doc """
+  Gets a single answered_question.
+
+  Raises `Ecto.NoResultsError` if the Answered question does not exist.
+
+  ## Examples
+
+      iex> get_answered_question(123)
+      %AnsweredQuestion{}
+
+      iex> get_answered_question(456)
+      ** nil
+
+  """
+  def get_answered_question(%{user_id: user_id, question_id: question_id, quiz_id: quiz_id}),
+    do:
+      Repo.get_by(AnsweredQuestion, user_id: user_id, question_id: question_id, quiz_id: quiz_id)
+
+  @doc """
+  Creates a answered_question.
+
+  ## Examples
+
+      iex> create_answered_question(%{field: value})
+      {:ok, %AnsweredQuestion{}}
+
+      iex> create_answered_question(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_answered_question(attrs \\ %{}) do
+    %AnsweredQuestion{}
+    |> AnsweredQuestion.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking answered_question changes.
+
+  ## Examples
+
+      iex> change_answered_question(answered_question)
+      %Ecto.Changeset{data: %AnsweredQuestion{}}
+
+  """
+  def change_answered_question(%AnsweredQuestion{} = answered_question, attrs \\ %{}) do
+    AnsweredQuestion.changeset(answered_question, attrs)
   end
 end
