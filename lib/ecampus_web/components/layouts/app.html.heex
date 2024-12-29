@@ -18,23 +18,23 @@
           <%= if @current_user do %>
             <li>
               <.link href={~p"/users/settings"} class="link link-hover">
-                Settings
+                {gettext("Settings")}
               </.link>
             </li>
             <li>
               <.link href={~p"/users/log_out"} method="delete" class="link link-hover">
-                Log out
+                {gettext("Log out")}
               </.link>
             </li>
           <% else %>
             <li>
               <.link href={~p"/users/register"} class="link link-hover">
-                Register
+                {gettext("Register")}
               </.link>
             </li>
             <li>
               <.link href={~p"/users/log_in"} class="link link-hover">
-                Log in
+                {gettext("Log in")}
               </.link>
             </li>
           <% end %>

@@ -7,7 +7,8 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
   @stop_rendering_flag "<!-- Rendering stopped -->"
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, %{"locale" => locale} = _session, socket) do
+    Gettext.put_locale(EcampusWeb.Gettext, locale)
     {:ok, socket}
   end
 

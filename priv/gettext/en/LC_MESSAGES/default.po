@@ -1,0 +1,87 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/ecampus_web/components/core_components.ex:480
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:147
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:138
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:159
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:154
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:137
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:142
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:117
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:26
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:32
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Dashboard"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/files.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Files"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/program.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Program"
+msgstr ""

@@ -5,7 +5,8 @@ defmodule EcampusWeb.Dashboard.ScheduleLive.Index do
   alias Ecampus.Classes.Class
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, %{"locale" => locale} = _session, socket) do
+    Gettext.put_locale(EcampusWeb.Gettext, locale)
     %{group_id: group_id} = socket.assigns[:current_user]
 
     {:ok, %{list: classes, pagination: pagination}} =

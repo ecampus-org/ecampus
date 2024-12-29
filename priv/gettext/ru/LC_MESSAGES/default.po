@@ -1,0 +1,87 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+
+#: lib/ecampus_web/components/core_components.ex:480
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Действия"
+
+#: lib/ecampus_web/components/core_components.ex:147
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Попытка восстановить соединение"
+
+#: lib/ecampus_web/components/core_components.ex:138
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr "Ошибка!"
+
+#: lib/ecampus_web/components/core_components.ex:159
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Подождите, попытка соединения с сервером"
+
+#: lib/ecampus_web/components/core_components.ex:154
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Что-то пошло не так!"
+
+#: lib/ecampus_web/components/core_components.ex:137
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr "Успех!"
+
+#: lib/ecampus_web/components/core_components.ex:142
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Нет сети"
+
+#: lib/ecampus_web/components/core_components.ex:117
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr "Закрыть"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr "Настройки"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr "Войти"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:26
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr "Выйти"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:32
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+#: lib/ecampus_web/live/dashboard/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Dashboard"
+msgstr "Дэшборд"
+
+#: lib/ecampus_web/live/dashboard/files.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Files"
+msgstr "Файлы"
+
+#: lib/ecampus_web/live/dashboard/program.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Program"
+msgstr "Учебная программа"

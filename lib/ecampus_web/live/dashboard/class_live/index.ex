@@ -4,7 +4,8 @@ defmodule EcampusWeb.Dashboard.ClassLive.Index do
   alias Ecampus.Lessons
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, %{"locale" => locale} = _session, socket) do
+    Gettext.put_locale(EcampusWeb.Gettext, locale)
     {:ok, socket}
   end
 
