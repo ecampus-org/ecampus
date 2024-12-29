@@ -261,6 +261,20 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           |> Phoenix.HTML.Safe.to_iodata()
           |> to_string()
 
+        quiz_html =
+          case Enum.all?(quiz.questions, fn question ->
+                 case Enum.at(question.answered_questions, 0) do
+                   %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+                     true
+
+                   _ ->
+                     false
+                 end
+               end) do
+            true -> quiz_html
+            false -> quiz_html <> @stop_rendering_flag
+          end
+
         updated_content_acc =
           String.replace(content_acc, "[quiz #{quiz_id}]", quiz_html)
 
