@@ -52,19 +52,29 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
   @impl true
   def handle_event(
         "answer-question",
-        %{"question-id" => question_id} = params,
+        %{"question-id" => question_id, "question-type" => question_type, "quiz-id" => quiz_id} =
+          params,
         socket
       ) do
     answer_ids =
-      params
-      |> Enum.filter(fn {key, value} ->
-        String.starts_with?(key, "answer-") and value == "true"
-      end)
-      |> Enum.map(fn {key, _value} ->
-        Regex.run(~r/answer-(\d+)/, key)
-        |> List.last()
-        |> String.to_integer()
-      end)
+      case question_type do
+        "multiple" ->
+          params
+          |> Enum.filter(fn {key, value} ->
+            String.starts_with?(key, "answer-") and value == "true"
+          end)
+          |> Enum.map(fn {key, _value} ->
+            Regex.run(~r/answer-(\d+)/, key)
+            |> List.last()
+            |> String.to_integer()
+          end)
+
+        "sequence" ->
+          Map.get(socket.assigns, :sequences, %{}) |> Map.get("#{quiz_id}-#{question_id}", [])
+
+        _ ->
+          []
+      end
 
     Quizzes.answer_question(%{
       question_id: question_id,
@@ -109,6 +119,38 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
      |> assign(:topic, topic)}
   end
 
+  @impl true
+  def handle_event(
+        action,
+        %{"quiz-id" => quiz_id, "question-id" => question_id, "answer-id" => answer_id},
+        socket
+      )
+      when action in ["select-sequence-answer", "unselect-sequence-answer"] do
+    sequences = Map.get(socket.assigns, :sequences, %{})
+
+    answers =
+      case action do
+        "select-sequence-answer" ->
+          [String.to_integer(answer_id) | Map.get(sequences, "#{quiz_id}-#{question_id}", [])]
+
+        "unselect-sequence-answer" ->
+          Map.get(sequences, "#{quiz_id}-#{question_id}", [])
+          |> Enum.filter(fn a -> a != String.to_integer(answer_id) end)
+      end
+
+    updated_socket =
+      socket
+      |> assign(:sequences, Map.put(sequences, "#{quiz_id}-#{question_id}", answers))
+
+    {topic, updated_socket} =
+      Map.get(updated_socket.assigns, :topic)
+      |> parse_markdown(updated_socket)
+
+    {:noreply,
+     updated_socket
+     |> assign(:topic, topic)}
+  end
+
   defp render_quiz(assigns) do
     ~H"""
     <div class="not-prose card shadow-md">
@@ -125,9 +167,11 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
       <% else %>
         <form class="card-body" phx-submit="answer-question">
           <.input name="question-id" type="hidden" value={@question.id} />
+          <.input name="quiz-id" type="hidden" value={@quiz.id} />
           <h3 class="card-title my-0">{@question.title}</h3>
           <p class="text-sm">{@question.subtitle}</p>
           <%= if @question.type == :multiple do %>
+            <.input name="question-type" type="hidden" value={:multiple} />
             <%= for answer <- @question.answers do %>
               <.input
                 name={"answer-#{answer.id}"}
@@ -150,12 +194,79 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
               <% end %>
             <% end %>
           <% end %>
+
           <%= if @question.type == :sequence do %>
-            <div class="flex flex-row flex-wrap gap-2">
-              <%= for answer <- @question.answers do %>
-                <button class="btn btn-ghost">{answer.title}</button>
-              <% end %>
-            </div>
+            <.input name="question-type" type="hidden" value={:sequence} />
+            <%= if @has_answer do %>
+              <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
+                <%= for answer <- @answered_ids |> Enum.map(fn id -> Enum.find(@question.answers, &(&1.id == id)) end) do %>
+                  <button
+                    type="button"
+                    class={[
+                      "btn btn-success btn-sm",
+                      @answered_ids == @correct_ids && "btn-success",
+                      @answered_ids != @correct_ids && "btn-error"
+                    ]}
+                  >
+                    {answer.title}
+                  </button>
+                <% end %>
+              </div>
+              <div class="divider">Right answer</div>
+              <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
+                <%= for answer <- @correct_ids |> Enum.map(fn id -> Enum.find(@question.answers, &(&1.id == id)) end) do %>
+                  <button type="button" class="btn btn-success btn-sm">
+                    {answer.title}
+                  </button>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="flex w-full flex-col border-opacity-50">
+                <%= if length(Map.get(@sequences,"#{@quiz.id}-#{@question.id}", [])) == 0 do %>
+                  <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-center items-center ">
+                    No items selected
+                  </div>
+                <% else %>
+                  <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
+                    <%= for answer <- Map.get(@sequences,"#{@quiz.id}-#{@question.id}", []) |> Enum.reverse() |> Enum.map(fn id -> Enum.find(@question.answers, &(&1.id == id)) end) do %>
+                      <button
+                        type="button"
+                        phx-click="unselect-sequence-answer"
+                        phx-value-quiz-id={@quiz.id}
+                        phx-value-question-id={@question.id}
+                        phx-value-answer-id={answer.id}
+                        class="btn btn-accent btn-sm"
+                      >
+                        {answer.title}
+                        <span class="hero-x-mark"></span>
+                      </button>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <div class="divider">Please select in correct order</div>
+                <%= if length(@question.answers) == length(Map.get(@sequences,"#{@quiz.id}-#{@question.id}", [])) do %>
+                  <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-center items-center ">
+                    No items left
+                  </div>
+                <% else %>
+                  <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
+                    <%= for answer <- @question.answers |> Enum.filter(fn a -> !Enum.member?(Map.get(@sequences,"#{@quiz.id}-#{@question.id}", []), a.id) end) do %>
+                      <button
+                        type="button"
+                        phx-click="select-sequence-answer"
+                        phx-value-quiz-id={@quiz.id}
+                        phx-value-question-id={@question.id}
+                        phx-value-answer-id={answer.id}
+                        class="btn btn-neutral btn-sm"
+                      >
+                        {answer.title}
+                      </button>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
           <div class="card-actions justify-end">
             <%= if @question_index > 0 do %>
@@ -214,6 +325,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
       |> Enum.reduce({content, socket}, fn [_, id], {content_acc, socket_acc} ->
         quiz_id = String.to_integer(id)
 
+        sequences = Map.get(socket.assigns, :sequences, %{})
         question_indexes = Map.get(socket.assigns, :question_indexes, %{})
 
         question_indexes =
@@ -229,7 +341,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
         quiz_html =
           %{quiz_id: quiz_id, user_id: socket.assigns.current_user.id}
           |> Quizzes.get_started_quiz()
-          |> render_quiz_html(question_indexes)
+          |> render_quiz_html(question_indexes, sequences)
 
         updated_content_acc =
           String.replace(content_acc, "[quiz #{quiz_id}]", quiz_html)
@@ -245,7 +357,8 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
 
   defp render_quiz_html(
          %{started: true, id: quiz_id} = quiz,
-         question_indexes
+         question_indexes,
+         sequences
        ) do
     question_index = Map.get(question_indexes, quiz_id)
     question = Enum.at(quiz.questions, question_index)
@@ -255,6 +368,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
         quiz: quiz,
         question: question,
         question_index: question_index,
+        sequences: sequences,
         has_answer: has_answer?(question),
         correct_ids:
           case Enum.at(question.answered_questions, 0) do
@@ -283,11 +397,12 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
     end
   end
 
-  defp render_quiz_html(quiz, _) do
+  defp render_quiz_html(quiz, _, _) do
     render_quiz(%{
       quiz: quiz,
       question: nil,
       question_index: 0,
+      sequences: %{},
       has_answer: false,
       correct_ids: [],
       answered_ids: []

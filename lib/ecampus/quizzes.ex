@@ -201,6 +201,20 @@ defmodule Ecampus.Quizzes do
     end
   end
 
+  defp apply_answer(%{type: :sequence} = question, %{answer_ids: answer_ids} = answer) do
+    correct_ids =
+      question.answers
+      |> Enum.filter(& &1.is_correct)
+      |> Enum.sort(&(&1.sequence_order_number < &2.sequence_order_number))
+      |> Enum.map(& &1.id)
+
+    if answer_ids == correct_ids do
+      Map.merge(answer, %{grade: question.grade, correct: answer_ids})
+    else
+      Map.merge(answer, %{grade: 0, correct: correct_ids})
+    end
+  end
+
   defp apply_answer(nil, _), do: nil
 
   defp apply_answer(_question, answer) do
