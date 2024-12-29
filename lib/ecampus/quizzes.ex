@@ -95,6 +95,15 @@ defmodule Ecampus.Quizzes do
         )
     )
     |> Repo.preload(questions: [:answers, :answered_questions])
+    |> detect_started()
+  end
+
+  defp detect_started(quiz) do
+    if length(quiz.questions) > 0 && length(Enum.at(quiz.questions, 0).answered_questions) > 0 do
+      Map.put(quiz, :started, true)
+    else
+      Map.put(quiz, :started, false)
+    end
   end
 
   def start_quiz(%{

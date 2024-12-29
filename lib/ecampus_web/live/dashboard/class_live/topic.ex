@@ -226,54 +226,10 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           socket_acc
           |> assign(:question_indexes, question_indexes)
 
-        quiz =
-          Quizzes.get_started_quiz(%{quiz_id: quiz_id, user_id: socket.assigns.current_user.id})
-
-        question = Enum.at(quiz.questions, Map.get(question_indexes, quiz_id))
-
         quiz_html =
-          render_quiz(%{
-            quiz: quiz,
-            question: question,
-            question_index: Map.get(question_indexes, quiz_id),
-            has_answer:
-              case Enum.at(question.answered_questions, 0) do
-                %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) -> true
-                _ -> false
-              end,
-            correct_ids:
-              case Enum.at(question.answered_questions, 0) do
-                %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
-                  Map.get(answer, "correct", [])
-
-                _ ->
-                  []
-              end,
-            answered_ids:
-              case Enum.at(question.answered_questions, 0) do
-                %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
-                  Map.get(answer, "answer_ids", [])
-
-                _ ->
-                  []
-              end
-          })
-          |> Phoenix.HTML.Safe.to_iodata()
-          |> to_string()
-
-        quiz_html =
-          case Enum.all?(quiz.questions, fn question ->
-                 case Enum.at(question.answered_questions, 0) do
-                   %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
-                     true
-
-                   _ ->
-                     false
-                 end
-               end) do
-            true -> quiz_html
-            false -> quiz_html <> @stop_rendering_flag
-          end
+          %{quiz_id: quiz_id, user_id: socket.assigns.current_user.id}
+          |> Quizzes.get_started_quiz()
+          |> render_quiz_html(question_indexes)
 
         updated_content_acc =
           String.replace(content_acc, "[quiz #{quiz_id}]", quiz_html)
@@ -285,5 +241,66 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
       updated_content,
       updated_socket
     }
+  end
+
+  defp render_quiz_html(
+         %{started: true, id: quiz_id} = quiz,
+         question_indexes
+       ) do
+    question_index = Map.get(question_indexes, quiz_id)
+    question = Enum.at(quiz.questions, question_index)
+
+    quiz_html =
+      render_quiz(%{
+        quiz: quiz,
+        question: question,
+        question_index: question_index,
+        has_answer: has_answer?(question),
+        correct_ids:
+          case Enum.at(question.answered_questions, 0) do
+            %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+              Map.get(answer, "correct", [])
+
+            _ ->
+              []
+          end,
+        answered_ids:
+          case Enum.at(question.answered_questions, 0) do
+            %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+              Map.get(answer, "answer_ids", [])
+
+            _ ->
+              []
+          end
+      })
+      |> Phoenix.HTML.Safe.to_iodata()
+      |> to_string()
+
+    if Enum.all?(quiz.questions, &has_answer?(&1)) do
+      quiz_html
+    else
+      quiz_html <> @stop_rendering_flag
+    end
+  end
+
+  defp render_quiz_html(quiz, _) do
+    render_quiz(%{
+      quiz: quiz,
+      question: nil,
+      question_index: 0,
+      has_answer: false,
+      correct_ids: [],
+      answered_ids: []
+    })
+    |> Phoenix.HTML.Safe.to_iodata()
+    |> to_string()
+    |> Kernel.<>(@stop_rendering_flag)
+  end
+
+  defp has_answer?(%Ecampus.Quizzes.Question{answered_questions: answered_questions}) do
+    case Enum.at(answered_questions, 0) do
+      %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) -> true
+      _ -> false
+    end
   end
 end
