@@ -35,8 +35,8 @@ jobs:
         name: Test on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
         strategy:
             matrix:
-                otp: ["25.0.4"]
-                elixir: ["1.14.1"]
+                otp: ["27.2"]
+                elixir: ["1.18.1"]
         steps:
             - name: Set up Elixir
               uses: erlef/setup-beam@v1
@@ -95,8 +95,8 @@ jobs:
 
         strategy:
             matrix:
-                otp: ["25.0.4"]
-                elixir: ["1.14.1"]
+                otp: ["27.2"]
+                elixir: ["1.18.1"]
 
         name: Lint on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
 
