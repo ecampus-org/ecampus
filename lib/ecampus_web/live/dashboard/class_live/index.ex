@@ -1,5 +1,7 @@
 defmodule EcampusWeb.Dashboard.ClassLive.Index do
   use EcampusWeb, :live_view
+  use Gettext, backend: EcampusWeb.Gettext
+
   alias Ecampus.Classes
   alias Ecampus.Lessons
 

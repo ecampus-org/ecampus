@@ -1,5 +1,7 @@
 defmodule EcampusWeb.Dashboard.ClassLive.Topic do
   use EcampusWeb, :live_view
+  use Gettext, backend: EcampusWeb.Gettext
+
   alias Ecampus.Classes
   alias Ecampus.Lessons
   alias Ecampus.Quizzes
@@ -161,7 +163,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           <p class="text-sm">{@quiz.description}</p>
           <div class="card-actions justify-end">
             <button phx-click="start-quiz" phx-value-quiz-id={@quiz.id} class="btn btn-primary">
-              Begin
+              {gettext("Begin")}
             </button>
           </div>
         </div>
@@ -213,7 +215,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
                   </button>
                 <% end %>
               </div>
-              <div class="divider">Right answer</div>
+              <div class="divider">{gettext("Right answer")}</div>
               <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
                 <%= for answer <- @correct_ids |> Enum.map(fn id -> Enum.find(@question.answers, &(&1.id == id)) end) do %>
                   <button type="button" class="btn btn-success btn-sm">
@@ -225,7 +227,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
               <div class="flex w-full flex-col border-opacity-50">
                 <%= if length(Map.get(@sequences,"#{@quiz.id}-#{@question.id}", [])) == 0 do %>
                   <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-center items-center ">
-                    No items selected
+                    {gettext("No item selected")}
                   </div>
                 <% else %>
                   <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
@@ -245,10 +247,10 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
                   </div>
                 <% end %>
 
-                <div class="divider">Please select in correct order</div>
+                <div class="divider">{gettext("Please select in correct order")}</div>
                 <%= if length(@question.answers) == length(Map.get(@sequences,"#{@quiz.id}-#{@question.id}", [])) do %>
                   <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-center items-center ">
-                    No items left
+                    {gettext("No items left")}
                   </div>
                 <% else %>
                   <div class="card bg-base-200 rounded-box min-h-16 p-4 flex flex-row justify-start items-center flex-wrap gap-2">
@@ -275,14 +277,14 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
                 type="button"
                 phx-click="prev-question"
                 phx-value-quiz-id={@quiz.id}
-                class="btn btn-ghost"
+                class="btn btn-neutral"
               >
-                Prev
+                {gettext("Prev")}
               </button>
             <% end %>
             <%= if Enum.at(@question.answered_questions, 0).answer == nil do %>
               <button type="submit" class="btn btn-primary">
-                Submit
+                {gettext("Submit")}
               </button>
             <% else %>
               <%= if @question_index < length(@quiz.questions) - 1 do %>
@@ -290,9 +292,9 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
                   type="button"
                   phx-click="next-question"
                   phx-value-quiz-id={@quiz.id}
-                  class="btn btn-ghost"
+                  class="btn btn-neutral"
                 >
-                  Next
+                  {gettext("Next")}
                 </button>
               <% end %>
             <% end %>

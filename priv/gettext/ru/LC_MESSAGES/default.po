@@ -71,17 +71,130 @@ msgstr "Выйти"
 msgid "Register"
 msgstr "Зарегистрироваться"
 
+#: lib/ecampus_web/components/layouts/app.html.heex:49
 #: lib/ecampus_web/live/dashboard/index.html.heex:2
 #, elixir-autogen, elixir-format
 msgid "Dashboard"
 msgstr "Дэшборд"
 
+#: lib/ecampus_web/components/layouts/app.html.heex:64
 #: lib/ecampus_web/live/dashboard/files.html.heex:2
 #, elixir-autogen, elixir-format
 msgid "Files"
 msgstr "Файлы"
 
+#: lib/ecampus_web/components/layouts/app.html.heex:54
 #: lib/ecampus_web/live/dashboard/program.html.heex:2
 #, elixir-autogen, elixir-format
 msgid "Program"
 msgstr "Учебная программа"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:9
+#, elixir-autogen, elixir-format
+msgid "Hours count"
+msgstr "Количество часов"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:25
+#, elixir-autogen, elixir-format
+msgid "Lesson topics"
+msgstr "Учебные вопросы занятия"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "No subject"
+msgstr "Предмет не указан"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:8
+#, elixir-autogen, elixir-format
+msgid "Objectives"
+msgstr "Цели занятия"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "Subject"
+msgstr "Предмет"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Title"
+msgstr "Название"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:7
+#, elixir-autogen, elixir-format
+msgid "Topic"
+msgstr "Тема"
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Class info"
+msgstr "Информация о занятии"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:166
+#, elixir-autogen, elixir-format
+msgid "Begin"
+msgstr "Начать"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:297
+#, elixir-autogen, elixir-format
+msgid "Next"
+msgstr "Далее"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:230
+#, elixir-autogen, elixir-format
+msgid "No item selected"
+msgstr "Ничего не выбрано"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:253
+#, elixir-autogen, elixir-format
+msgid "No items left"
+msgstr "Нет элементов для выбора"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:250
+#, elixir-autogen, elixir-format
+msgid "Please select in correct order"
+msgstr "Выберите в правильном порядке"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:282
+#, elixir-autogen, elixir-format
+msgid "Prev"
+msgstr "Назад"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:218
+#, elixir-autogen, elixir-format
+msgid "Right answer"
+msgstr "Правильный ответ"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:287
+#, elixir-autogen, elixir-format
+msgid "Submit"
+msgstr "Ответить"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:89
+#, elixir-autogen, elixir-format
+msgid "Classes"
+msgstr "Занятия"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:74
+#, elixir-autogen, elixir-format
+msgid "Groups"
+msgstr "Группы"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:84
+#, elixir-autogen, elixir-format
+msgid "Lessons"
+msgstr "Материалы занятий"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:59
+#, elixir-autogen, elixir-format
+msgid "Schedule"
+msgstr "Расписание"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:69
+#, elixir-autogen, elixir-format
+msgid "Specialities"
+msgstr "Специальности"
+
+#: lib/ecampus_web/components/layouts/app.html.heex:79
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Subjects"
+msgstr "Предметы"
