@@ -338,7 +338,7 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
 
   defp render_quiz(assigns) do
     ~H"""
-    <div class="not-prose card shadow-md">
+    <div class="card shadow-md">
       <%= if length(@quiz.questions) == 0 do %>
         <div class="card-body">
           <h2 class="card-title my-0">{@quiz.title}</h2>
