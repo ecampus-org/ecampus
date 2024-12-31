@@ -73,7 +73,9 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           end)
 
         "sequence" ->
-          Map.get(socket.assigns, :sequences, %{}) |> Map.get("#{quiz_id}-#{question_id}", [])
+          Map.get(socket.assigns, :sequences, %{})
+          |> Map.get("#{quiz_id}-#{question_id}", [])
+          |> Enum.reverse()
 
         _ ->
           []
