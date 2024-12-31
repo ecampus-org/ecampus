@@ -176,17 +176,23 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
 
     content
     |> String.split("\n", trim: true)
-    |> Enum.map(fn line ->
-      if String.contains?(line, "[chat-bubble") do
-        Regex.scan(regex, line)
-        |> Enum.map(fn [_, key, value] -> {String.to_atom(key), value} end)
-        |> Map.new()
-        |> render_chat_bubble_html()
-      else
-        line
-      end
-    end)
-    |> Enum.join("\n")
+    |> Enum.map_join("\n", &process_line(&1, regex))
+  end
+
+  defp process_line(line, regex) do
+    if String.contains?(line, "[chat-bubble") do
+      line
+      |> extract_params(regex)
+      |> render_chat_bubble_html()
+    else
+      line
+    end
+  end
+
+  defp extract_params(line, regex) do
+    Regex.scan(regex, line)
+    |> Enum.map(fn [_, key, value] -> {String.to_atom(key), value} end)
+    |> Map.new()
   end
 
   defp render_chat_bubble_html(%{pos: pos, avatar: _, name: _, text: _} = params)
