@@ -154,6 +154,182 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
      |> assign(:topic, topic)}
   end
 
+  defp parse_markdown(lesson_topic, socket) do
+    {replaced_content, socket} =
+      lesson_topic.content
+      |> Earmark.as_html!()
+      |> replace_chat_bubble()
+      |> replace_quiz(socket)
+
+    html_content =
+      replaced_content
+      |> String.split(@stop_rendering_flag)
+      |> List.first()
+
+    {Map.put(lesson_topic, :html_content, html_content), socket}
+  end
+
+  # Chat bubble begin
+
+  defp replace_chat_bubble(content) do
+    regex = ~r/\b(pos|avatar|name|text)=\[(.*?)\]/
+
+    content
+    |> String.split("\n", trim: true)
+    |> Enum.map(fn line ->
+      if String.contains?(line, "[chat-bubble") do
+        Regex.scan(regex, line)
+        |> Enum.map(fn [_, key, value] -> {String.to_atom(key), value} end)
+        |> Map.new()
+        |> render_chat_bubble_html()
+      else
+        line
+      end
+    end)
+    |> Enum.join("\n")
+  end
+
+  defp render_chat_bubble_html(%{pos: pos, avatar: _, name: _, text: _} = params)
+       when pos in ["left", "right"] do
+    render_chat_bubble(params)
+    |> Phoenix.HTML.Safe.to_iodata()
+    |> to_string()
+  end
+
+  defp render_chat_bubble_html(_), do: ""
+
+  defp render_chat_bubble(assigns) do
+    ~H"""
+    <div class={[
+      "chat",
+      @pos == "left" && "chat-start",
+      @pos == "right" && "chat-end"
+    ]}>
+      <div class="chat-image avatar">
+        <%= if @avatar != "" do %>
+          <div class="w-10 rounded-full bg-neutral text-neutral-content ">
+            <img alt="Tailwind CSS chat bubble component" src={@avatar} />
+          </div>
+        <% else %>
+          <div class="w-10 rounded-full bg-neutral text-neutral-content text-center">
+            <div class="w-full h-full text-2xl flex items-center justify-center">
+              {@name |> String.first()}
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="chat-header">
+        {@name}
+      </div>
+      <div class="chat-bubble">{@text}</div>
+    </div>
+    """
+  end
+
+  # chat bubble end
+
+  # Quiz section begin
+
+  defp replace_quiz(content, socket) do
+    {updated_content, updated_socket} =
+      Regex.scan(~r/\[quiz (\d+)\]/, content)
+      |> Enum.reduce({content, socket}, fn [_, id], {content_acc, socket_acc} ->
+        quiz_id = String.to_integer(id)
+
+        sequences = Map.get(socket.assigns, :sequences, %{})
+        question_indexes = Map.get(socket.assigns, :question_indexes, %{})
+
+        question_indexes =
+          case Map.get(question_indexes, quiz_id, -1) do
+            -1 -> Map.put(question_indexes, quiz_id, 0)
+            index -> Map.put(question_indexes, quiz_id, index)
+          end
+
+        updated_socket_acc =
+          socket_acc
+          |> assign(:question_indexes, question_indexes)
+
+        quiz_html =
+          %{quiz_id: quiz_id, user_id: socket.assigns.current_user.id}
+          |> Quizzes.get_started_quiz()
+          |> render_quiz_html(question_indexes, sequences)
+
+        updated_content_acc =
+          String.replace(content_acc, "[quiz #{quiz_id}]", quiz_html)
+
+        {updated_content_acc, updated_socket_acc}
+      end)
+
+    {
+      updated_content,
+      updated_socket
+    }
+  end
+
+  defp render_quiz_html(
+         %{started: true, id: quiz_id} = quiz,
+         question_indexes,
+         sequences
+       ) do
+    question_index = Map.get(question_indexes, quiz_id)
+    question = Enum.at(quiz.questions, question_index)
+
+    quiz_html =
+      render_quiz(%{
+        quiz: quiz,
+        question: %{question | subtitle: Earmark.as_html!(question.subtitle)},
+        question_index: question_index,
+        sequences: sequences,
+        has_answer: has_answer?(question),
+        correct_ids:
+          case Enum.at(question.answered_questions, 0) do
+            %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+              Map.get(answer, "correct", [])
+
+            _ ->
+              []
+          end,
+        answered_ids:
+          case Enum.at(question.answered_questions, 0) do
+            %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
+              Map.get(answer, "answer_ids", [])
+
+            _ ->
+              []
+          end
+      })
+      |> Phoenix.HTML.Safe.to_iodata()
+      |> to_string()
+
+    if Enum.all?(quiz.questions, &has_answer?(&1)) do
+      quiz_html
+    else
+      quiz_html <> @stop_rendering_flag
+    end
+  end
+
+  defp render_quiz_html(quiz, _, _) do
+    render_quiz(%{
+      quiz: quiz,
+      question: nil,
+      question_index: 0,
+      sequences: %{},
+      has_answer: false,
+      correct_ids: [],
+      answered_ids: []
+    })
+    |> Phoenix.HTML.Safe.to_iodata()
+    |> to_string()
+    |> Kernel.<>(@stop_rendering_flag)
+  end
+
+  defp has_answer?(%Ecampus.Quizzes.Question{answered_questions: answered_questions}) do
+    case Enum.at(answered_questions, 0) do
+      %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) -> true
+      _ -> false
+    end
+  end
+
   defp render_quiz(assigns) do
     ~H"""
     <div class="not-prose card shadow-md">
@@ -305,120 +481,5 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
     """
   end
 
-  defp parse_markdown(lesson_topic, socket) do
-    {replaced_content, socket} =
-      replace_custom_tags(Earmark.as_html!(lesson_topic.content), socket)
-
-    html_content =
-      replaced_content
-      |> String.split(@stop_rendering_flag)
-      |> List.first()
-
-    {Map.put(lesson_topic, :html_content, html_content), socket}
-  end
-
-  defp replace_custom_tags(content, socket),
-    do:
-      content
-      |> replace_quiz(socket)
-
-  defp replace_quiz(content, socket) do
-    {updated_content, updated_socket} =
-      Regex.scan(~r/\[quiz (\d+)\]/, content)
-      |> Enum.reduce({content, socket}, fn [_, id], {content_acc, socket_acc} ->
-        quiz_id = String.to_integer(id)
-
-        sequences = Map.get(socket.assigns, :sequences, %{})
-        question_indexes = Map.get(socket.assigns, :question_indexes, %{})
-
-        question_indexes =
-          case Map.get(question_indexes, quiz_id, -1) do
-            -1 -> Map.put(question_indexes, quiz_id, 0)
-            index -> Map.put(question_indexes, quiz_id, index)
-          end
-
-        updated_socket_acc =
-          socket_acc
-          |> assign(:question_indexes, question_indexes)
-
-        quiz_html =
-          %{quiz_id: quiz_id, user_id: socket.assigns.current_user.id}
-          |> Quizzes.get_started_quiz()
-          |> render_quiz_html(question_indexes, sequences)
-
-        updated_content_acc =
-          String.replace(content_acc, "[quiz #{quiz_id}]", quiz_html)
-
-        {updated_content_acc, updated_socket_acc}
-      end)
-
-    {
-      updated_content,
-      updated_socket
-    }
-  end
-
-  defp render_quiz_html(
-         %{started: true, id: quiz_id} = quiz,
-         question_indexes,
-         sequences
-       ) do
-    question_index = Map.get(question_indexes, quiz_id)
-    question = Enum.at(quiz.questions, question_index)
-
-    quiz_html =
-      render_quiz(%{
-        quiz: quiz,
-        question: %{question | subtitle: Earmark.as_html!(question.subtitle)},
-        question_index: question_index,
-        sequences: sequences,
-        has_answer: has_answer?(question),
-        correct_ids:
-          case Enum.at(question.answered_questions, 0) do
-            %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
-              Map.get(answer, "correct", [])
-
-            _ ->
-              []
-          end,
-        answered_ids:
-          case Enum.at(question.answered_questions, 0) do
-            %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) ->
-              Map.get(answer, "answer_ids", [])
-
-            _ ->
-              []
-          end
-      })
-      |> Phoenix.HTML.Safe.to_iodata()
-      |> to_string()
-
-    if Enum.all?(quiz.questions, &has_answer?(&1)) do
-      quiz_html
-    else
-      quiz_html <> @stop_rendering_flag
-    end
-  end
-
-  defp render_quiz_html(quiz, _, _) do
-    render_quiz(%{
-      quiz: quiz,
-      question: nil,
-      question_index: 0,
-      sequences: %{},
-      has_answer: false,
-      correct_ids: [],
-      answered_ids: []
-    })
-    |> Phoenix.HTML.Safe.to_iodata()
-    |> to_string()
-    |> Kernel.<>(@stop_rendering_flag)
-  end
-
-  defp has_answer?(%Ecampus.Quizzes.Question{answered_questions: answered_questions}) do
-    case Enum.at(answered_questions, 0) do
-      %Ecampus.Quizzes.AnsweredQuestion{answer: answer} when not is_nil(answer) -> true
-      _ -> false
-    end
-  end
+  # Quiz section end
 end
