@@ -86,6 +86,8 @@ defmodule Ecampus.Quizzes do
         quiz_id: quiz_id,
         user_id: user_id
       }) do
+    seed = :crypto.hash(:sha, Integer.to_string(user_id)) |> :binary.decode_unsigned()
+
     Repo.get!(Ecampus.Quizzes.Quiz, quiz_id)
     |> Repo.preload(
       questions:
@@ -95,7 +97,25 @@ defmodule Ecampus.Quizzes do
         )
     )
     |> Repo.preload(questions: [:answers, :answered_questions])
+    |> randomize_answers(seed)
     |> detect_started()
+  end
+
+  defp randomize_answers(quiz, seed) do
+    :rand.seed(:exsplus, seed)
+
+    updated_questions =
+      Enum.map(quiz.questions, fn question ->
+        shuffled_answers =
+          question.answers
+          |> Enum.with_index()
+          |> Enum.sort_by(fn {_answer, _index} -> :rand.uniform() end)
+          |> Enum.map(fn {answer, _index} -> answer end)
+
+        %{question | answers: shuffled_answers}
+      end)
+
+    %{quiz | questions: updated_questions}
   end
 
   defp detect_started(quiz) do
