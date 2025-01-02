@@ -28,6 +28,11 @@
             </li>
           <% else %>
             <li>
+              <.link href={~p"/users/register"} class="link link-hover">
+                {gettext("Register")}
+              </.link>
+            </li>
+            <li>
               <.link href={~p"/users/log_in"} class="link link-hover">
                 {gettext("Log in")}
               </.link>
