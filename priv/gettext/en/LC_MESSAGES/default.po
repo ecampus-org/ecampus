@@ -129,42 +129,42 @@ msgstr ""
 msgid "Class info"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:166
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:359
 #, elixir-autogen, elixir-format
 msgid "Begin"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:297
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:521
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:230
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:454
 #, elixir-autogen, elixir-format
 msgid "No item selected"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:253
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:477
 #, elixir-autogen, elixir-format
 msgid "No items left"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:250
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:474
 #, elixir-autogen, elixir-format
 msgid "Please select in correct order"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:282
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:506
 #, elixir-autogen, elixir-format
 msgid "Prev"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:218
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
 #, elixir-autogen, elixir-format
 msgid "Right answer"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:287
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:511
 #, elixir-autogen, elixir-format
 msgid "Submit"
 msgstr ""
@@ -197,4 +197,19 @@ msgstr ""
 #: lib/ecampus_web/components/layouts/app.html.heex:79
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Subjects"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:418
+#, elixir-autogen, elixir-format
+msgid "Correct answer!"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:420
+#, elixir-autogen, elixir-format
+msgid "Please, wait for manual answer check"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:416
+#, elixir-autogen, elixir-format
+msgid "Wrong answer"
 msgstr ""

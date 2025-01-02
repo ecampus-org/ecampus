@@ -235,6 +235,10 @@ defmodule Ecampus.Quizzes do
     end
   end
 
+  defp apply_answer(%{type: :open}, %{answer_text: answer_text} = answer) do
+    Map.merge(answer, %{grade: nil, correct: nil, answer_text: answer_text})
+  end
+
   defp apply_answer(nil, _), do: nil
 
   defp apply_answer(_question, answer) do

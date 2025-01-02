@@ -129,42 +129,42 @@ msgstr "Тема"
 msgid "Class info"
 msgstr "Информация о занятии"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:166
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:359
 #, elixir-autogen, elixir-format
 msgid "Begin"
 msgstr "Начать"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:297
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:521
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr "Далее"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:230
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:454
 #, elixir-autogen, elixir-format
 msgid "No item selected"
 msgstr "Ничего не выбрано"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:253
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:477
 #, elixir-autogen, elixir-format
 msgid "No items left"
 msgstr "Нет элементов для выбора"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:250
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:474
 #, elixir-autogen, elixir-format
 msgid "Please select in correct order"
 msgstr "Выберите в правильном порядке"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:282
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:506
 #, elixir-autogen, elixir-format
 msgid "Prev"
 msgstr "Назад"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:218
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
 #, elixir-autogen, elixir-format
 msgid "Right answer"
 msgstr "Правильный ответ"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:287
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:511
 #, elixir-autogen, elixir-format
 msgid "Submit"
 msgstr "Ответить"
@@ -198,3 +198,18 @@ msgstr "Специальности"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Subjects"
 msgstr "Предметы"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:418
+#, elixir-autogen, elixir-format
+msgid "Correct answer!"
+msgstr "Ответ правильный!"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:420
+#, elixir-autogen, elixir-format
+msgid "Please, wait for manual answer check"
+msgstr "Пожалуйста, подождите проверки ответа"
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:416
+#, elixir-autogen, elixir-format
+msgid "Wrong answer"
+msgstr "Неверный ответ"

@@ -59,32 +59,41 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
           params,
         socket
       ) do
-    answer_ids =
+    answer =
       case question_type do
         "multiple" ->
-          params
-          |> Enum.filter(fn {key, value} ->
-            String.starts_with?(key, "answer-") and value == "true"
-          end)
-          |> Enum.map(fn {key, _value} ->
-            Regex.run(~r/answer-(\d+)/, key)
-            |> List.last()
-            |> String.to_integer()
-          end)
+          %{
+            answer_ids:
+              params
+              |> Enum.filter(fn {key, value} ->
+                String.starts_with?(key, "answer-") and value == "true"
+              end)
+              |> Enum.map(fn {key, _value} ->
+                Regex.run(~r/answer-(\d+)/, key)
+                |> List.last()
+                |> String.to_integer()
+              end)
+          }
 
         "sequence" ->
-          Map.get(socket.assigns, :sequences, %{})
-          |> Map.get("#{quiz_id}-#{question_id}", [])
-          |> Enum.reverse()
+          %{
+            answer_ids:
+              Map.get(socket.assigns, :sequences, %{})
+              |> Map.get("#{quiz_id}-#{question_id}", [])
+              |> Enum.reverse()
+          }
+
+        "open" ->
+          %{answer_text: Map.get(params, "text", nil)}
 
         _ ->
-          []
+          nil
       end
 
     Quizzes.answer_question(%{
       question_id: question_id,
       user_id: socket.assigns.current_user.id,
-      answer: %{answer_ids: answer_ids}
+      answer: answer
     })
 
     {topic, socket} =
@@ -379,6 +388,37 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
                   {answer.subtitle}
                 </p>
               <% end %>
+            <% end %>
+          <% end %>
+
+          <%= if @question.type == :open do %>
+            <.input name="question-type" type="hidden" value={:open} />
+            <.input
+              name="text"
+              type="textarea"
+              value={
+                (@has_answer &&
+                   Map.get(Enum.at(@question.answered_questions, 0).answer, "answer_text", "")) ||
+                  ""
+              }
+              rows="6"
+              disabled={@has_answer}
+            />
+            <%= if @has_answer do %>
+              <p class={[
+                "text-xs",
+                Map.get(Enum.at(@question.answered_questions, 0).answer, "correct") == false &&
+                  "text-error",
+                Map.get(Enum.at(@question.answered_questions, 0).answer, "correct") == true &&
+                  "text-success"
+              ]}>
+                {(Map.get(Enum.at(@question.answered_questions, 0).answer, "correct") == false &&
+                    gettext("Wrong answer")) || ""}
+                {(Map.get(Enum.at(@question.answered_questions, 0).answer, "correct") == true &&
+                    gettext("Correct answer!")) || ""}
+                {(Map.get(Enum.at(@question.answered_questions, 0).answer, "correct") == nil &&
+                    gettext("Please, wait for manual answer check")) || ""}
+              </p>
             <% end %>
           <% end %>
 

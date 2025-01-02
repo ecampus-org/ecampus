@@ -13,7 +13,7 @@ defmodule Ecampus.Quizzes.Question do
   }
 
   schema "questions" do
-    field :type, Ecto.Enum, values: [:multiple, :sequence]
+    field :type, Ecto.Enum, values: [:multiple, :sequence, :open]
     field :title, :string
     field :subtitle, :string
     field :grade, :integer
