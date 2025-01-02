@@ -1,11 +1,9 @@
 <main class="flex flex-col justify-start min-h-screen min-w-screen">
   <.flash_group flash={@flash} />
   <div class="w-full flex flex-row justify-between items-center px-2 py-4 h-16">
-    <div class="flex flex-row gap-2 items-center">
-      <.link href={~p"/"} class="link no-underline font-bold">
-        e-Campus
-      </.link>
-    </div>
+    <.link href={~p"/"} class="link no-underline font-bold">
+      <img src="/images/logo-128.png" alt="logo" class="mx-3 inline h-8 w-8" /> eCampus
+    </.link>
     <div class="dropdown dropdown-end">
       <button class="btn btn-ghost"><.icon name="hero-bars-3" /></button>
       <div class="dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">

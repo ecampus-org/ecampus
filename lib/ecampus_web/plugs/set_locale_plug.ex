@@ -9,22 +9,14 @@ defmodule EcampusWeb.Plugs.SetLocale do
 
   def init(_options), do: nil
 
-  def call(%Plug.Conn{params: %{"locale" => locale}} = conn, _options)
-      when locale in @supported_locales do
-    case fetch_locale_from(conn) do
-      nil ->
-        conn
+  def call(conn, _options) do
+    locale = fetch_locale_from(conn)
+    EcampusWeb.Gettext |> Gettext.put_locale(locale)
 
-      locale ->
-        EcampusWeb.Gettext |> Gettext.put_locale(locale)
-
-        conn
-        |> put_resp_cookie("locale", locale, max_age: 365 * 24 * 60 * 60)
-        |> put_session(:locale, locale)
-    end
+    conn
+    |> put_resp_cookie("locale", locale, max_age: 365 * 24 * 60 * 60)
+    |> put_session(:locale, locale)
   end
-
-  def call(conn, _options), do: conn
 
   defp fetch_locale_from(conn) do
     (conn.params["locale"] || conn.cookies["locale"])
@@ -32,5 +24,5 @@ defmodule EcampusWeb.Plugs.SetLocale do
   end
 
   defp check_locale(locale) when locale in @supported_locales, do: locale
-  defp check_locale(_), do: nil
+  defp check_locale(_), do: "en"
 end

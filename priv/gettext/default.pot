@@ -51,39 +51,39 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:21
+#: lib/ecampus_web/components/layouts/app.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:37
+#: lib/ecampus_web/components/layouts/app.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:26
+#: lib/ecampus_web/components/layouts/app.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:32
+#: lib/ecampus_web/components/layouts/app.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:49
+#: lib/ecampus_web/components/layouts/app.html.heex:47
 #: lib/ecampus_web/live/dashboard/index.html.heex:2
 #, elixir-autogen, elixir-format
 msgid "Dashboard"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:64
+#: lib/ecampus_web/components/layouts/app.html.heex:62
 #: lib/ecampus_web/live/dashboard/files.html.heex:2
 #, elixir-autogen, elixir-format
 msgid "Files"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:54
+#: lib/ecampus_web/components/layouts/app.html.heex:52
 #: lib/ecampus_web/live/dashboard/program.html.heex:2
 #, elixir-autogen, elixir-format
 msgid "Program"
@@ -169,32 +169,32 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:89
+#: lib/ecampus_web/components/layouts/app.html.heex:87
 #, elixir-autogen, elixir-format
 msgid "Classes"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:74
+#: lib/ecampus_web/components/layouts/app.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Groups"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:84
+#: lib/ecampus_web/components/layouts/app.html.heex:82
 #, elixir-autogen, elixir-format
 msgid "Lessons"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:59
+#: lib/ecampus_web/components/layouts/app.html.heex:57
 #, elixir-autogen, elixir-format
 msgid "Schedule"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:69
+#: lib/ecampus_web/components/layouts/app.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "Specialities"
 msgstr ""
 
-#: lib/ecampus_web/components/layouts/app.html.heex:79
+#: lib/ecampus_web/components/layouts/app.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Subjects"
 msgstr ""
@@ -212,4 +212,44 @@ msgstr ""
 #: lib/ecampus_web/live/dashboard/class_live/topic.ex:416
 #, elixir-autogen, elixir-format
 msgid "Wrong answer"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:45
+#, elixir-autogen, elixir-format
+msgid "Explore, contribute, or report issues on"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Get Started"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:28
+#, elixir-autogen, elixir-format
+msgid "Powered by"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:17
+#, elixir-autogen, elixir-format
+msgid "To Dashboard"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Welcome to eCampus!"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "Your open-source, next-generation university education system"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:39
+#, elixir-autogen, elixir-format
+msgid "and"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:57
+#, elixir-autogen, elixir-format
+msgid "eCampus Illustration"
 msgstr ""
