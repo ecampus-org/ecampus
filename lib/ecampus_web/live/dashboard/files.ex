@@ -1,6 +1,6 @@
-defmodule EcampusWeb.Dashboard.Index do
+defmodule EcampusWeb.Dashboard.Files do
   @moduledoc """
-  This module contains the dashboard
+  This module contains the files page in the dashboard
   """
 
   use EcampusWeb, :live_view

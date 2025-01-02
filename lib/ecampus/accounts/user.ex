@@ -130,6 +130,16 @@ defmodule Ecampus.Accounts.User do
   end
 
   @doc """
+  A user changeset for changing account group.
+  """
+  def group_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:group_id])
+    |> validate_required([:group_id])
+    |> foreign_key_constraint(:group_id, message: "Wrong group")
+  end
+
+  @doc """
   Confirms the account by setting `confirmed_at`.
   """
   def confirm_changeset(user) do

@@ -1,0 +1,255 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/ecampus_web/components/core_components.ex:480
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:147
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:138
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:159
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:154
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:137
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:142
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/ecampus_web/components/core_components.ex:117
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:19
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:35
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:24
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:30
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:47
+#: lib/ecampus_web/live/dashboard/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Dashboard"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:62
+#: lib/ecampus_web/live/dashboard/files.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Files"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:52
+#: lib/ecampus_web/live/dashboard/program.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Program"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:9
+#, elixir-autogen, elixir-format
+msgid "Hours count"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:25
+#, elixir-autogen, elixir-format
+msgid "Lesson topics"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "No subject"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:8
+#, elixir-autogen, elixir-format
+msgid "Objectives"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "Subject"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Title"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:7
+#, elixir-autogen, elixir-format
+msgid "Topic"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Class info"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:359
+#, elixir-autogen, elixir-format
+msgid "Begin"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:521
+#, elixir-autogen, elixir-format
+msgid "Next"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:454
+#, elixir-autogen, elixir-format
+msgid "No item selected"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:477
+#, elixir-autogen, elixir-format
+msgid "No items left"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:474
+#, elixir-autogen, elixir-format
+msgid "Please select in correct order"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:506
+#, elixir-autogen, elixir-format
+msgid "Prev"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
+#, elixir-autogen, elixir-format
+msgid "Right answer"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:511
+#, elixir-autogen, elixir-format
+msgid "Submit"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:87
+#, elixir-autogen, elixir-format
+msgid "Classes"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:72
+#, elixir-autogen, elixir-format
+msgid "Groups"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:82
+#, elixir-autogen, elixir-format
+msgid "Lessons"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:57
+#, elixir-autogen, elixir-format
+msgid "Schedule"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:67
+#, elixir-autogen, elixir-format
+msgid "Specialities"
+msgstr ""
+
+#: lib/ecampus_web/components/layouts/app.html.heex:77
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Subjects"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:418
+#, elixir-autogen, elixir-format
+msgid "Correct answer!"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:420
+#, elixir-autogen, elixir-format
+msgid "Please, wait for manual answer check"
+msgstr ""
+
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:416
+#, elixir-autogen, elixir-format
+msgid "Wrong answer"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:45
+#, elixir-autogen, elixir-format
+msgid "Explore, contribute, or report issues on"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Get Started"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:28
+#, elixir-autogen, elixir-format
+msgid "Powered by"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:17
+#, elixir-autogen, elixir-format, fuzzy
+msgid "To Dashboard"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Welcome to eCampus!"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:10
+#, elixir-autogen, elixir-format
+msgid "Your open-source, next-generation university education system"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:39
+#, elixir-autogen, elixir-format
+msgid "and"
+msgstr ""
+
+#: lib/ecampus_web/controllers/page_html/home.html.heex:57
+#, elixir-autogen, elixir-format
+msgid "eCampus Illustration"
+msgstr ""

@@ -1,14 +1,14 @@
 <.header>
-  Listing Classes
+  {gettext("Class info")}
 </.header>
 
 <.list>
-  <:item title="Title">{@class.lesson.title}</:item>
-  <:item title="Topic">{@class.lesson.topic}</:item>
-  <:item title="Objectives">{@class.lesson.objectives}</:item>
-  <:item title="Hours count">{@class.lesson.hours_count}</:item>
-  <:item title="Subject">
-    {(@class.lesson.subject && @class.lesson.subject.title) || "No Subject"}
+  <:item title={gettext("Title")}>{@class.lesson.title}</:item>
+  <:item title={gettext("Topic")}>{@class.lesson.topic}</:item>
+  <:item title={gettext("Objectives")}>{@class.lesson.objectives}</:item>
+  <:item title={gettext("Hours count")}>{@class.lesson.hours_count}</:item>
+  <:item title={gettext("Subject")}>
+    {(@class.lesson.subject && @class.lesson.subject.title) || gettext("No subject")}
   </:item>
 </.list>
 
@@ -22,6 +22,6 @@
       end
     }
   >
-    <:col :let={lesson_topic} label="Lesson topics">{lesson_topic.title}</:col>
+    <:col :let={lesson_topic} label={gettext("Lesson topics")}>{lesson_topic.title}</:col>
   </.table>
 </div>

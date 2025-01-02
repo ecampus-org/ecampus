@@ -2,6 +2,7 @@ defmodule EcampusWeb.UserSettingsLive do
   use EcampusWeb, :live_view
 
   alias Ecampus.Accounts
+  alias Ecampus.Groups
 
   def render(assigns) do
     ~H"""
@@ -9,6 +10,28 @@ defmodule EcampusWeb.UserSettingsLive do
       Account Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
+
+    <div class="space-y-12 divide-y">
+      <div>
+        <.simple_form for={@group_form} id="group_form" phx-submit="update_group">
+          <.input
+            field={@group_form[:group_id]}
+            name="group_id"
+            type="select"
+            label="Group"
+            options={Enum.map(@groups, &{&1.title, &1.id})}
+            value={@current_group_id}
+            prompt="Select a group"
+            disabled={@current_group_id != nil}
+          />
+          <:actions>
+            <.button disabled={@current_group_id != nil} phx-disable-with="Changing...">
+              Change Group
+            </.button>
+          </:actions>
+        </.simple_form>
+      </div>
+    </div>
 
     <div class="space-y-12 divide-y">
       <div>
@@ -90,13 +113,19 @@ defmodule EcampusWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    group_changeset = Accounts.change_user_group(user)
+
+    groups = Groups.list_groups()
 
     socket =
       socket
+      |> assign(:groups, groups)
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
+      |> assign(:current_group_id, user.group_id)
+      |> assign(:group_form, to_form(group_changeset))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
 
@@ -162,6 +191,20 @@ defmodule EcampusWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  def handle_event("update_group", %{"group_id" => group_id}, socket) do
+    user = socket.assigns.current_user
+
+    params = %{group_id: String.to_integer(group_id)}
+
+    case Accounts.update_user_group(user, params) do
+      {:ok, user} ->
+        {:noreply, assign(socket, current_group_id: user.group_id)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, group_form: to_form(changeset))}
     end
   end
 end
