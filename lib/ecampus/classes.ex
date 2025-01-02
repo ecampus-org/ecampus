@@ -37,12 +37,17 @@ defmodule Ecampus.Classes do
         {"lesson_id", value}, acc ->
           [%{field: :lesson_id, value: value} | acc]
 
+        {"group_id", nil}, acc ->
+          [%{field: :group_id, op: :empty, value: true} | acc]
+
         {"group_id", value}, acc ->
           [%{field: :group_id, value: value} | acc]
 
         _, acc ->
           acc
       end)
+
+    {filters, params} |> IO.inspect()
 
     Class
     |> preload([:lesson, :group, lesson: [:subject]])
