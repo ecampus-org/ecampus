@@ -7,7 +7,7 @@ defmodule EcampusWeb.QuestionLive.Index do
   @impl true
   def mount(%{"lesson_id" => lesson_id, "quiz_id" => quiz_id}, _session, socket) do
     {:ok, %{list: questions, pagination: pagination}} =
-      Quizzes.list_questions()
+      Quizzes.list_questions(%{"quiz_id" => String.to_integer(quiz_id)})
 
     {:ok,
      socket

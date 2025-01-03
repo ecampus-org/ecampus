@@ -101,7 +101,7 @@ defmodule Ecampus.Quizzes do
     |> detect_started()
   end
 
-  defp randomize_answers(quiz, seed) do
+  defp randomize_answers(%{type: :quiz} = quiz, seed) do
     :rand.seed(:exsplus, seed)
 
     updated_questions =
@@ -116,6 +116,21 @@ defmodule Ecampus.Quizzes do
       end)
 
     %{quiz | questions: updated_questions}
+  end
+
+  defp randomize_answers(%{type: :survey} = quiz, _) do
+    updated_quz = %{
+      quiz
+      | questions:
+          quiz.questions
+          |> Enum.filter(fn question -> Enum.at(question.answered_questions, 0).answer == nil end)
+    }
+
+    Map.put(
+      updated_quz,
+      :survey_done,
+      Enum.empty?(updated_quz.questions) && !Enum.empty?(quiz.questions)
+    )
   end
 
   defp detect_started(quiz) do
@@ -158,13 +173,15 @@ defmodule Ecampus.Quizzes do
           end)
     }
 
-  defp shuffle_and_get_question(%Quiz{} = quiz),
+  defp shuffle_and_get_question(%Quiz{type: :quiz} = quiz),
     do: %{
       quiz
       | questions:
           Enum.shuffle(quiz.questions)
           |> Enum.take(quiz.questions_per_attempt)
     }
+
+  defp shuffle_and_get_question(%Quiz{type: :survey} = quiz), do: quiz
 
   def answer_question(%{
         question_id: question_id,
@@ -176,7 +193,7 @@ defmodule Ecampus.Quizzes do
            where: aq.user_id == ^user_id and q.id == ^question_id and is_nil(aq.answer)
          )
          |> Repo.one()
-         |> Repo.preload([:answers])
+         |> Repo.preload([:answers, :quiz])
          |> apply_answer(answer) do
       nil ->
         {:error, "Already answered"}
@@ -193,7 +210,10 @@ defmodule Ecampus.Quizzes do
     end
   end
 
-  defp apply_answer(%{type: :multiple} = question, %{answer_ids: answer_ids} = answer) do
+  defp apply_answer(
+         %{type: :multiple, quiz: %{type: :quiz}} = question,
+         %{answer_ids: answer_ids} = answer
+       ) do
     correct_ids =
       question.answers
       |> Enum.filter(& &1.is_correct)
@@ -221,7 +241,17 @@ defmodule Ecampus.Quizzes do
     end
   end
 
-  defp apply_answer(%{type: :sequence} = question, %{answer_ids: answer_ids} = answer) do
+  defp apply_answer(
+         %{type: :multiple, quiz: %{type: :survey}},
+         %{answer_ids: answer_ids} = answer
+       ) do
+    Map.merge(answer, %{answer_ids: answer_ids})
+  end
+
+  defp apply_answer(
+         %{type: :sequence, quiz: %{type: :quiz}} = question,
+         %{answer_ids: answer_ids} = answer
+       ) do
     correct_ids =
       question.answers
       |> Enum.filter(& &1.is_correct)
@@ -235,8 +265,19 @@ defmodule Ecampus.Quizzes do
     end
   end
 
-  defp apply_answer(%{type: :open}, %{answer_text: answer_text} = answer) do
+  defp apply_answer(
+         %{type: :sequence, quiz: %{type: :survey}},
+         %{answer_ids: answer_ids} = answer
+       ) do
+    Map.merge(answer, %{answer_ids: answer_ids})
+  end
+
+  defp apply_answer(%{type: :open, quiz: %{type: :quiz}}, %{answer_text: answer_text} = answer) do
     Map.merge(answer, %{grade: nil, correct: nil, answer_text: answer_text})
+  end
+
+  defp apply_answer(%{type: :open, quiz: %{type: :survey}}, %{answer_text: answer_text} = answer) do
+    Map.merge(answer, %{answer_text: answer_text})
   end
 
   defp apply_answer(nil, _), do: nil
@@ -352,7 +393,7 @@ defmodule Ecampus.Quizzes do
         order_by: [:id],
         order_directions: [:asc]
       },
-      for: Quiz
+      for: Question
     )
     |> with_pagination()
   end
