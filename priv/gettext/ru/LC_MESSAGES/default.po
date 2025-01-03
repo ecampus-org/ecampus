@@ -11,7 +11,7 @@ msgstr ""
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 
-#: lib/ecampus_web/components/core_components.ex:480
+#: lib/ecampus_web/components/core_components.ex:490
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Действия"
@@ -129,42 +129,42 @@ msgstr "Тема"
 msgid "Class info"
 msgstr "Информация о занятии"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:359
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:380
 #, elixir-autogen, elixir-format
 msgid "Begin"
 msgstr "Начать"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:521
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:543
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr "Далее"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:454
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:476
 #, elixir-autogen, elixir-format
 msgid "No item selected"
 msgstr "Ничего не выбрано"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:477
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:499
 #, elixir-autogen, elixir-format
 msgid "No items left"
 msgstr "Нет элементов для выбора"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:474
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:496
 #, elixir-autogen, elixir-format
 msgid "Please select in correct order"
 msgstr "Выберите в правильном порядке"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:506
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:528
 #, elixir-autogen, elixir-format
 msgid "Prev"
 msgstr "Назад"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:464
 #, elixir-autogen, elixir-format
 msgid "Right answer"
 msgstr "Правильный ответ"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:511
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:533
 #, elixir-autogen, elixir-format
 msgid "Submit"
 msgstr "Ответить"
@@ -199,17 +199,17 @@ msgstr "Специальности"
 msgid "Subjects"
 msgstr "Предметы"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:418
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:440
 #, elixir-autogen, elixir-format
 msgid "Correct answer!"
 msgstr "Ответ правильный!"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:420
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
 #, elixir-autogen, elixir-format
 msgid "Please, wait for manual answer check"
 msgstr "Пожалуйста, подождите проверки ответа"
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:416
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:438
 #, elixir-autogen, elixir-format
 msgid "Wrong answer"
 msgstr "Неверный ответ"
@@ -249,4 +249,7 @@ msgstr "Систему университетского образования �
 msgid "and"
 msgstr "и"
 
-
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:372
+#, elixir-autogen, elixir-format
+msgid "Thanks for feedback!"
+msgstr "Спасибо за отзыв!"

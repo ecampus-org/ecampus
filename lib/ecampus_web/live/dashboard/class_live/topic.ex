@@ -318,11 +318,26 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
       |> Phoenix.HTML.Safe.to_iodata()
       |> to_string()
 
-    if Enum.all?(quiz.questions, &has_answer?(&1)) do
+    if Enum.all?(quiz.questions, &has_answer?(&1)) ||
+         (quiz.type == :survey && quiz.survey_done == true) do
       quiz_html
     else
       quiz_html <> @stop_rendering_flag
     end
+  end
+
+  defp render_quiz_html(%{type: :survey, survey_done: true} = quiz, _, _) do
+    render_quiz(%{
+      quiz: quiz,
+      question: nil,
+      question_index: 0,
+      sequences: %{},
+      has_answer: false,
+      correct_ids: [],
+      answered_ids: []
+    })
+    |> Phoenix.HTML.Safe.to_iodata()
+    |> to_string()
   end
 
   defp render_quiz_html(quiz, _, _) do
@@ -351,15 +366,22 @@ defmodule EcampusWeb.Dashboard.ClassLive.Topic do
     ~H"""
     <div class="card shadow-md">
       <%= if length(@quiz.questions) == 0 do %>
-        <div class="card-body">
-          <h2 class="card-title my-0">{@quiz.title}</h2>
-          <p class="text-sm">{@quiz.description}</p>
-          <div class="card-actions justify-end">
-            <button phx-click="start-quiz" phx-value-quiz-id={@quiz.id} class="btn btn-primary">
-              {gettext("Begin")}
-            </button>
+        <%= if @quiz.type == :survey && @quiz.survey_done == true do %>
+          <div class="card-body">
+            <span class="hero-hand-thumb-up h-12 w-12" />
+            <h2 class="card-title my-0">{gettext("Thanks for feedback!")}</h2>
           </div>
-        </div>
+        <% else %>
+          <div class="card-body">
+            <h2 class="card-title my-0">{@quiz.title}</h2>
+            <p class="text-sm">{@quiz.description}</p>
+            <div class="card-actions justify-end">
+              <button phx-click="start-quiz" phx-value-quiz-id={@quiz.id} class="btn btn-primary">
+                {gettext("Begin")}
+              </button>
+            </div>
+          </div>
+        <% end %>
       <% else %>
         <form class="card-body" phx-submit="answer-question">
           <.input name="question-id" type="hidden" value={@question.id} />
