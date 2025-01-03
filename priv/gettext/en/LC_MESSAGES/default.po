@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/ecampus_web/components/core_components.ex:480
+#: lib/ecampus_web/components/core_components.ex:490
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -129,42 +129,42 @@ msgstr ""
 msgid "Class info"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:359
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:380
 #, elixir-autogen, elixir-format
 msgid "Begin"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:521
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:543
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:454
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:476
 #, elixir-autogen, elixir-format
 msgid "No item selected"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:477
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:499
 #, elixir-autogen, elixir-format
 msgid "No items left"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:474
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:496
 #, elixir-autogen, elixir-format
 msgid "Please select in correct order"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:506
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:528
 #, elixir-autogen, elixir-format
 msgid "Prev"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:464
 #, elixir-autogen, elixir-format
 msgid "Right answer"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:511
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:533
 #, elixir-autogen, elixir-format
 msgid "Submit"
 msgstr ""
@@ -199,17 +199,17 @@ msgstr ""
 msgid "Subjects"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:418
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:440
 #, elixir-autogen, elixir-format
 msgid "Correct answer!"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:420
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:442
 #, elixir-autogen, elixir-format
 msgid "Please, wait for manual answer check"
 msgstr ""
 
-#: lib/ecampus_web/live/dashboard/class_live/topic.ex:416
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:438
 #, elixir-autogen, elixir-format
 msgid "Wrong answer"
 msgstr ""
@@ -249,7 +249,7 @@ msgstr ""
 msgid "and"
 msgstr ""
 
-#: lib/ecampus_web/controllers/page_html/home.html.heex:57
+#: lib/ecampus_web/live/dashboard/class_live/topic.ex:372
 #, elixir-autogen, elixir-format
-msgid "eCampus Illustration"
+msgid "Thanks for feedback!"
 msgstr ""

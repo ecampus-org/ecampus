@@ -390,7 +390,7 @@ defmodule Ecampus.Quizzes do
         page: Map.get(params, "page", 1),
         page_size: Map.get(params, "page_size", 10),
         filters: filters,
-        order_by: [:id],
+        order_by: [:sort_order],
         order_directions: [:asc]
       },
       for: Question
@@ -499,7 +499,10 @@ defmodule Ecampus.Quizzes do
 
   """
   def list_answers do
-    Repo.all(Answer) |> Repo.preload(:question)
+    Answer
+    |> order_by(asc: :sort_order)
+    |> Repo.all()
+    |> Repo.preload(:question)
   end
 
   @doc """
